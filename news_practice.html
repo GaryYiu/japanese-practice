@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日のニュース｜スピーキング練習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#e7e0cf;
+    --paper-card:#f4efe1;
+    --ink:#221f1a;
+    --ink-soft:#524b3f;
+    --shu:#bd3a1e;
+    --shu-soft:#e2c2b6;
+    --ai:#2b4560;
+    --ai-soft:#c9d3dc;
+    --gold:#a2812f;
+    --line:rgba(34,31,26,0.14);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(34,31,26,0.045) 1px, transparent 0);
+    background-size: 14px 14px;
+    color:var(--ink);
+    font-family:'Zen Kaku Gothic New','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;
+    min-height:100vh;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .mincho{font-family:'Shippori Mincho',serif;}
+
+  ruby{ruby-position:over;}
+  rt{
+    font-size:0.48em;
+    color:var(--shu);
+    font-weight:500;
+    letter-spacing:0;
+  }
+  .no-furigana rt{display:none;}
+
+  .app{
+    max-width:1180px;
+    margin:0 auto;
+    padding:28px 20px 60px;
+  }
+
+  /* ===== Header ===== */
+  header.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+    flex-wrap:wrap;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:16px;
+    margin-bottom:18px;
+  }
+  .masthead .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--shu);
+    margin-bottom:6px;
+  }
+  .masthead h1{
+    font-family:'Shippori Mincho',serif;
+    font-weight:800;
+    font-size:clamp(28px,4vw,40px);
+    margin:0;
+    line-height:1.15;
+  }
+  .masthead p{
+    margin:6px 0 0;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .date-chip{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    text-align:right;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  .date-chip strong{
+    display:block;
+    color:var(--ink);
+    font-size:14px;
+  }
+
+  /* ===== Control bar ===== */
+  .controls{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:12px 16px;
+    margin-bottom:10px;
+  }
+  button{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    border:1px solid var(--ink);
+    background:var(--paper);
+    color:var(--ink);
+    padding:7px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:transform .12s ease, background .12s ease;
+  }
+  button:hover{background:var(--ink);color:var(--paper-card);}
+  button:active{transform:scale(0.96);}
+  button.primary{
+    background:var(--shu);
+    border-color:var(--shu);
+    color:#fdf6ef;
+  }
+  button.primary:hover{background:#9c2f18;}
+  .spacer{flex:1;}
+  .toggle-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+  }
+  .switch{
+    position:relative;
+    width:38px;height:20px;
+    background:var(--ai-soft);
+    border-radius:999px;
+    cursor:pointer;
+    border:1px solid var(--ink);
+  }
+  .switch .knob{
+    position:absolute;top:1px;left:1px;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--paper-card);
+    transition:left .15s ease;
+  }
+  .switch.on{background:var(--ai);}
+  .switch.on .knob{left:19px;background:#fff;}
+  .font-steps{display:flex;gap:4px;}
+  .font-steps button{padding:6px 9px;}
+
+  /* progress rail */
+  .progress-rail{
+    height:6px;
+    border-radius:999px;
+    background:var(--ai-soft);
+    overflow:hidden;
+    margin-bottom:24px;
+    border:1px solid var(--line);
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--shu);
+    width:0%;
+    transition:width .3s ease;
+  }
+
+  /* ===== Layout ===== */
+  .layout{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:22px;
+    align-items:start;
+  }
+  @media (max-width:820px){
+    .layout{grid-template-columns:1fr;}
+  }
+
+  /* ===== Rundown ===== */
+  .rundown{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    position:sticky;
+    top:18px;
+  }
+  .rundown-head{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:10px 14px;
+    border-bottom:1px solid var(--line);
+  }
+  .rd-item{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    padding:12px 14px;
+    border-left:3px solid transparent;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+    transition:background .12s ease;
+  }
+  .rd-item:last-child{border-bottom:none;}
+  .rd-item:hover{background:rgba(43,69,96,0.06);}
+  .rd-item.active{
+    border-left-color:var(--shu);
+    background:rgba(189,58,30,0.08);
+  }
+  .rd-num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    padding-top:2px;
+  }
+  .rd-item.active .rd-num{color:var(--shu);font-weight:600;}
+  .rd-icon{width:20px;height:20px;flex-shrink:0;color:var(--ai);}
+  .rd-item.active .rd-icon{color:var(--shu);}
+  .rd-text .rd-jp{font-size:14px;font-weight:500;}
+  .rd-text .rd-en{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .rd-text .rd-time{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--gold);
+    margin-top:2px;
+  }
+
+  /* ===== Stage ===== */
+  .stage{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px 28px 24px;
+  }
+  .stage-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .stage-head h2{
+    font-family:'Shippori Mincho',serif;
+    font-weight:700;
+    font-size:clamp(22px,3vw,28px);
+    margin:0 0 4px;
+  }
+  .stage-head .en-sub{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+  }
+  .time-chip{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    background:var(--ai);
+    color:#fff;
+    padding:5px 10px;
+    border-radius:7px;
+    white-space:nowrap;
+  }
+
+  .block{margin-bottom:22px;}
+  .block-label{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:5px 10px;
+    border-radius:7px;
+    margin-bottom:12px;
+  }
+  .block-label.narr{background:var(--ai-soft);color:var(--ai);}
+  .block-label.reaction{background:var(--gold);color:#fdf6ef;}
+  .block-label.vocab{background:rgba(162,129,47,0.18);color:var(--gold);}
+
+  .narration-text{
+    font-size:var(--fs,20px);
+    line-height:2.35;
+    letter-spacing:0.01em;
+  }
+  .narration-text p{margin:0 0 1.1em;}
+
+  .vocab-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:15px;
+  }
+  .vocab-table td{
+    padding:8px 10px;
+    border-bottom:1px solid var(--line);
+    vertical-align:middle;
+  }
+  .vocab-table td.term{
+    font-size:calc(var(--fs, 20px) * 0.85);
+    white-space:nowrap;
+    width:1%;
+  }
+  .vocab-table td.meaning{color:var(--ink-soft);font-size:13px;}
+
+  .reaction-box{
+    background:rgba(162,129,47,0.07);
+    border:1px solid rgba(162,129,47,0.35);
+    border-radius:10px;
+    padding:16px 18px;
+  }
+  .reaction-box ol{
+    margin:0;
+    padding-left:22px;
+    font-size:var(--fs,20px);
+    line-height:2.1;
+  }
+  .reaction-box li{margin-bottom:10px;}
+  .reaction-box li:last-child{margin-bottom:0;}
+
+  .phrase-table{width:100%;border-collapse:collapse;font-size:15px;}
+  .phrase-table td{padding:7px 10px;border-bottom:1px solid var(--line);}
+  .phrase-table td:first-child{font-weight:500;}
+  .phrase-table td:last-child{color:var(--ink-soft);font-size:13px;}
+
+  /* nav */
+  .stage-nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+  }
+  .stage-nav .count{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  footer{
+    margin-top:26px;
+    text-align:center;
+    font-size:11px;
+    color:var(--ink-soft);
+    line-height:1.8;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="masthead">
+      <div class="eyebrow">Speaking Rundown &middot; 収録台本</div>
+      <h1>今日のニュース</h1>
+      <p>A fully scripted read-aloud practice, built from the day's real news</p>
+    </div>
+    <div class="date-chip">
+      <strong>2026.07.09 (Thu)</strong>
+      NHK / tenki.jp / Sponichi
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="toggle-group">
+      <span>Furigana</span>
+      <div class="switch on" id="furiSwitch"><div class="knob"></div></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="toggle-group">
+      <span>Text</span>
+      <div class="font-steps">
+        <button id="fontDown">A−</button>
+        <button id="fontUp">A+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-rail"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="layout">
+    <!-- RUNDOWN -->
+    <nav class="rundown" id="rundown">
+      <div class="rundown-head">Rundown &middot; 全6セグメント</div>
+      <!-- items injected by JS -->
+    </nav>
+
+    <!-- STAGE -->
+    <main class="stage" id="stage">
+      <!-- injected by JS -->
+    </main>
+  </div>
+
+  <footer>
+    Script generated from NHK News, Japan Weather Association (tenki.jp), and Sponichi/Full-Count &middot; stories dated 2026.07.09<br>
+    Toggle furigana off once a word feels automatic. Re-run this rundown with tomorrow's headlines to keep practice fresh.
+  </footer>
+
+</div>
+
+<script>
+const ICONS = {
+  mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3M8 21h8"/></svg>',
+  typhoon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 12c-4-1-8 .5-8 4.5S7 21 10 19"/><path d="M12 12c1-4.2-.8-8-4.8-8S1 7.3 3 10.2"/><path d="M12 12c4 1.2 8-.3 8-4.3s-4-4.7-7-2.7"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>',
+  baseball: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M6.5 6c2 2 2 10 0 12M17.5 6c-2 2-2 10 0 12" stroke-dasharray="1.6 2"/></svg>',
+  torii: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h18M4 5.2c1 .6 1 1.4 0 2M20 5.2c-1 .6-1 1.4 0 2"/><path d="M7 7v14M17 7v14"/><path d="M5.5 10h13"/></svg>',
+  wrap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12a9 9 0 1 1-3.5-7.1"/><path d="M21 3v5h-5"/></svg>',
+  flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V4"/><path d="M5 4h13l-3 4 3 4H5"/></svg>'
+};
+
+const segments = [
+  {
+    num:'01', time:'00:00–00:45', dur:'0:45',
+    jp:'オープニング', en:'Opening', icon:'mic',
+    narration:`<p>みなさん、こんにちは！<ruby>今日<rt>きょう</rt></ruby>は2026<ruby>年<rt>ねん</rt></ruby>7<ruby>月<rt>がつ</rt></ruby>9<ruby>日<rt>にち</rt></ruby>、<ruby>木曜日<rt>もくようび</rt></ruby>です。<ruby>今日<rt>きょう</rt></ruby>も<ruby>日本<rt>にほん</rt></ruby>のニュースを<ruby>三<rt>みっ</rt></ruby>つ<ruby>紹介<rt>しょうかい</rt></ruby>します。<ruby>天気<rt>てんき</rt></ruby>のニュース、<ruby>野球<rt>やきゅう</rt></ruby>のニュース、そして<ruby>文化<rt>ぶんか</rt></ruby>のニュースです。それでは、<ruby>始<rt>はじ</rt></ruby>めましょう！</p>`,
+    vocab:null,
+    reaction:[`<ruby>今日<rt>きょう</rt></ruby>も<ruby>元気<rt>げんき</rt></ruby>です。<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>練習<rt>れんしゅう</rt></ruby>、<ruby>頑張<rt>がんば</rt></ruby>ります！`]
+  },
+  {
+    num:'02', time:'00:45–03:15', dur:'2:30',
+    jp:'ニュース① 台風と猛暑', en:'Typhoon & Heatwave', icon:'typhoon',
+    narration:`<p><ruby>大型<rt>おおがた</rt></ruby>で<ruby>非常<rt>ひじょう</rt></ruby>に<ruby>強<rt>つよ</rt></ruby>い<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>が、フィリピンの<ruby>東<rt>ひがし</rt></ruby>の<ruby>海上<rt>かいじょう</rt></ruby>を<ruby>北西<rt>ほくせい</rt></ruby>に<ruby>進<rt>すす</rt></ruby>んでいます。この<ruby>台風<rt>たいふう</rt></ruby>は<ruby>10日<rt>とおか</rt></ruby>から<ruby>11日<rt>じゅういちにち</rt></ruby>にかけて、<ruby>沖縄<rt>おきなわ</rt></ruby>の<ruby>先島諸島<rt>さきしましょとう</rt></ruby>、<ruby>石垣島<rt>いしがきじま</rt></ruby>などに<ruby>接近<rt>せっきん</rt></ruby>し、<ruby>通過<rt>つうか</rt></ruby>する<ruby>見込<rt>みこ</rt></ruby>みです。<ruby>八重山<rt>やえやま</rt></ruby><ruby>地方<rt>ちほう</rt></ruby>では、<ruby>家<rt>いえ</rt></ruby>が<ruby>壊<rt>こわ</rt></ruby>れるほどの<ruby>猛烈<rt>もうれつ</rt></ruby>な<ruby>風<rt>かぜ</rt></ruby>が<ruby>予想<rt>よそう</rt></ruby>されていて、<ruby>大雨<rt>おおあめ</rt></ruby>や<ruby>高波<rt>たかなみ</rt></ruby>にも<ruby>厳重<rt>げんじゅう</rt></ruby>な<ruby>警戒<rt>けいかい</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>です。</p>
+    <p><ruby>一方<rt>いっぽう</rt></ruby>、<ruby>本州<rt>ほんしゅう</rt></ruby>は<ruby>高気圧<rt>こうきあつ</rt></ruby>に<ruby>覆<rt>おお</rt></ruby>われて、<ruby>九州<rt>きゅうしゅう</rt></ruby>から<ruby>東北<rt>とうほく</rt></ruby><ruby>南部<rt>なんぶ</rt></ruby>にかけて<ruby>広<rt>ひろ</rt></ruby>く<ruby>晴<rt>は</rt></ruby>れています。<ruby>九州<rt>きゅうしゅう</rt></ruby>では37<ruby>度<rt>ど</rt></ruby>、<ruby>近畿<rt>きんき</rt></ruby>でも35<ruby>度<rt>ど</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えるところがあり、<ruby>各地<rt>かくち</rt></ruby>で<ruby>熱中症<rt>ねっちゅうしょう</rt></ruby><ruby>警戒<rt>けいかい</rt></ruby>アラートが<ruby>出<rt>で</rt></ruby>ています。</p>`,
+    vocab:[
+      [`<ruby>台風<rt>たいふう</rt></ruby>`,'typhoon'],
+      [`<ruby>接近<rt>せっきん</rt></ruby>する`,'to approach'],
+      [`<ruby>猛烈<rt>もうれつ</rt></ruby>な`,'fierce, violent'],
+      [`<ruby>警戒<rt>けいかい</rt></ruby>する`,'to be on alert'],
+      [`<ruby>熱中症<rt>ねっちゅうしょう</rt></ruby>`,'heatstroke'],
+      [`<ruby>猛暑<rt>もうしょ</rt></ruby>`,'intense heat'],
+      [`<ruby>涼<rt>すず</rt></ruby>しい`,'cool (temperature)']
+    ],
+    reaction:[
+      `<ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>も<ruby>今<rt>いま</rt></ruby>、<ruby>暑<rt>あつ</rt></ruby>いです。<ruby>毎日<rt>まいにち</rt></ruby>、<ruby>暑<rt>あつ</rt></ruby>くて<ruby>大変<rt>たいへん</rt></ruby>です。`,
+      `<ruby>台風<rt>たいふう</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は、あまり<ruby>外<rt>そと</rt></ruby>に<ruby>出<rt>で</rt></ruby>ません。<ruby>家<rt>いえ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で、<ruby>静<rt>しず</rt></ruby>かに<ruby>過<rt>す</rt></ruby>ごします。`,
+      `<ruby>早<rt>はや</rt></ruby>く<ruby>涼<rt>すず</rt></ruby>しくなってほしいです。`
+    ]
+  },
+  {
+    num:'03', time:'03:15–06:00', dur:'2:45',
+    jp:'ニュース② 岡本和真の満塁弾', en:'MLB: Okamoto\u2019s Grand Slam', icon:'baseball',
+    narration:`<p><ruby>大<rt>たい</rt></ruby>リーグ、ブルージェイズの<ruby>岡本和真<rt>おかもとかずま</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>が、ジャイアンツとの<ruby>試合<rt>しあい</rt></ruby>で、<ruby>自身<rt>じしん</rt></ruby>メジャー<ruby>初<rt>はつ</rt></ruby>となる<ruby>満塁<rt>まんるい</rt></ruby>ホームランを<ruby>打<rt>う</rt></ruby>ちました。これで<ruby>今<rt>こん</rt></ruby>シーズン21<ruby>号<rt>ごう</rt></ruby>となり、<ruby>日本人<rt>にほんじん</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>のメジャー1<ruby>年目<rt>ねんめ</rt></ruby><ruby>最多<rt>さいた</rt></ruby><ruby>本塁打<rt>ほんるいだ</rt></ruby><ruby>記録<rt>きろく</rt></ruby>まで、あと1<ruby>本<rt>ぽん</rt></ruby>に<ruby>迫<rt>せま</rt></ruby>りました。この<ruby>記録<rt>きろく</rt></ruby>は、<ruby>大谷翔平<rt>おおたにしょうへい</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>が2018<ruby>年<rt>ねん</rt></ruby>に<ruby>打<rt>う</rt></ruby>った22<ruby>本<rt>ほん</rt></ruby>です。<ruby>試合<rt>しあい</rt></ruby>はブルージェイズが10<ruby>対<rt>たい</rt></ruby>0で<ruby>快勝<rt>かいしょう</rt></ruby>しました。</p>`,
+    vocab:[
+      [`<ruby>満塁<rt>まんるい</rt></ruby>ホームラン`,'grand slam'],
+      [`<ruby>記録<rt>きろく</rt></ruby>`,'record'],
+      [`〜に<ruby>迫<rt>せま</rt></ruby>る`,'to close in on ~'],
+      [`<ruby>快勝<rt>かいしょう</rt></ruby>する`,'to win convincingly'],
+      [`<ruby>選手<rt>せんしゅ</rt></ruby>`,'player, athlete'],
+      [`<ruby>応援<rt>おうえん</rt></ruby>する`,'to cheer for, support']
+    ],
+    reaction:[
+      `<ruby>私<rt>わたし</rt></ruby>は<ruby>野球<rt>やきゅう</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。<ruby>大谷翔平<rt>おおたにしょうへい</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>のことを<ruby>知<rt>し</rt></ruby>っています。`,
+      `とても<ruby>人気<rt>にんき</rt></ruby>がある<ruby>選手<rt>せんしゅ</rt></ruby>です。<ruby>岡本<rt>おかもと</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>も<ruby>頑張<rt>がんば</rt></ruby>っていますね。`,
+      `<ruby>次<rt>つぎ</rt></ruby>の<ruby>試合<rt>しあい</rt></ruby>が<ruby>楽<rt>たの</rt></ruby>しみです。`
+    ]
+  },
+  {
+    num:'04', time:'06:00–08:30', dur:'2:30',
+    jp:'ニュース③ 飛鳥・藤原の世界遺産', en:'Asuka-Fujiwara: World Heritage', icon:'torii',
+    narration:`<p><ruby>奈良県<rt>ならけん</rt></ruby>にある<ruby>古代<rt>こだい</rt></ruby>の<ruby>都<rt>みやこ</rt></ruby>の<ruby>跡<rt>あと</rt></ruby>、「<ruby>飛鳥<rt>あすか</rt></ruby>・<ruby>藤原<rt>ふじわら</rt></ruby>の<ruby>宮都<rt>きゅうと</rt></ruby>」が、ユネスコの<ruby>世界文化遺産<rt>せかいぶんかいさん</rt></ruby>に<ruby>登録<rt>とうろく</rt></ruby>される<ruby>見通<rt>みとお</rt></ruby>しになりました。ユネスコの<ruby>諮問機関<rt>しもんきかん</rt></ruby>が<ruby>登録<rt>とうろく</rt></ruby>を<ruby>勧告<rt>かんこく</rt></ruby>し、7<ruby>月<rt>がつ</rt></ruby>に<ruby>韓国<rt>かんこく</rt></ruby>の<ruby>釜山<rt>プサン</rt></ruby>で<ruby>開<rt>ひら</rt></ruby>かれる<ruby>世界遺産委員会<rt>せかいいさんいいんかい</rt></ruby>で、<ruby>正式<rt>せいしき</rt></ruby>に<ruby>決定<rt>けってい</rt></ruby>される<ruby>予定<rt>よてい</rt></ruby>です。この<ruby>遺跡群<rt>いせきぐん</rt></ruby>には、<ruby>有名<rt>ゆうめい</rt></ruby>なキトラ<ruby>古墳<rt>こふん</rt></ruby>や<ruby>高松塚古墳<rt>たかまつづかこふん</rt></ruby>も<ruby>含<rt>ふく</rt></ruby>まれています。<ruby>登録<rt>とうろく</rt></ruby>されれば、<ruby>日本<rt>にほん</rt></ruby><ruby>国内<rt>こくない</rt></ruby>の<ruby>世界遺産<rt>せかいいさん</rt></ruby>は27<ruby>件目<rt>けんめ</rt></ruby>になります。</p>`,
+    vocab:[
+      [`<ruby>世界遺産<rt>せかいいさん</rt></ruby>`,'World Heritage Site'],
+      [`<ruby>登録<rt>とうろく</rt></ruby>される`,'to be registered'],
+      [`<ruby>古代<rt>こだい</rt></ruby>`,'ancient times'],
+      [`<ruby>遺跡<rt>いせき</rt></ruby>`,'ruins, historical site'],
+      [`<ruby>見通<rt>みとお</rt></ruby>し`,'outlook, prospect'],
+      [`<ruby>含<rt>ふく</rt></ruby>まれる`,'to be included']
+    ],
+    reaction:[
+      `<ruby>日本<rt>にほん</rt></ruby>の<ruby>世界遺産<rt>せかいいさん</rt></ruby>で、<ruby>富士山<rt>ふじさん</rt></ruby>を<ruby>知<rt>し</rt></ruby>っています。<ruby>京都<rt>きょうと</rt></ruby>にも<ruby>行<rt>い</rt></ruby>ったことがあります。`,
+      `とても<ruby>美<rt>うつく</rt></ruby>しい<ruby>場所<rt>ばしょ</rt></ruby>でした。`,
+      `<ruby>奈良<rt>なら</rt></ruby>にも、いつか<ruby>行<rt>い</rt></ruby>ってみたいです。`
+    ]
+  },
+  {
+    num:'05', time:'08:30–09:30', dur:'1:00',
+    jp:'まとめ＆フリートーク', en:'Recap & Free Talk', icon:'wrap',
+    narration:`<p><ruby>今日<rt>きょう</rt></ruby>は<ruby>三<rt>みっ</rt></ruby>つのニュースを<ruby>紹介<rt>しょうかい</rt></ruby>しました。<ruby>台風<rt>たいふう</rt></ruby>と<ruby>猛暑<rt>もうしょ</rt></ruby>、<ruby>岡本和真<rt>おかもとかずま</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>のホームラン、そして<ruby>飛鳥<rt>あすか</rt></ruby>・<ruby>藤原<rt>ふじわら</rt></ruby>の<ruby>世界遺産<rt>せかいいさん</rt></ruby>です。</p>`,
+    vocab:null,
+    phrases:[
+      ['〜と<ruby>思<rt>おも</rt></ruby>います','I think that ~'],
+      ['〜にびっくりしました','I was surprised by ~'],
+      [`<ruby>個人的<rt>こじんてき</rt></ruby>には〜`,'Personally, ~'],
+      ['もし〜だったら','If it were ~'],
+      [`それを<ruby>聞<rt>き</rt></ruby>いて〜`,'Hearing that, ~']
+    ],
+    reaction:[
+      `<ruby>今日<rt>きょう</rt></ruby>のニュースの<ruby>中<rt>なか</rt></ruby>で、<ruby>一番<rt>いちばん</rt></ruby><ruby>面白<rt>おもしろ</rt></ruby>かったのは、<ruby>岡本<rt>おかもと</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>のホームランです。`,
+      `<ruby>理由<rt>りゆう</rt></ruby>は、<ruby>私<rt>わたし</rt></ruby>も<ruby>野球<rt>やきゅう</rt></ruby>が<ruby>好<rt>す</rt></ruby>きだからです。`
+    ]
+  },
+  {
+    num:'06', time:'09:30–10:00', dur:'0:30',
+    jp:'クロージング', en:'Closing', icon:'flag',
+    narration:`<p><ruby>今日<rt>きょう</rt></ruby>のニュース<ruby>練習<rt>れんしゅう</rt></ruby>はここまでです。お<ruby>疲れ様<rt>つかれさま</rt></ruby>でした！<ruby>明日<rt>あした</rt></ruby>もまた<ruby>新<rt>あたら</rt></ruby>しいニュースで<ruby>練習<rt>れんしゅう</rt></ruby>しましょう。それでは、また！</p>`,
+    vocab:null,
+    reaction:[
+      `<ruby>今日<rt>きょう</rt></ruby>も<ruby>頑張<rt>がんば</rt></ruby>りました。<ruby>明日<rt>あした</rt></ruby>も<ruby>頑張<rt>がんば</rt></ruby>ります。`
+    ]
+  }
+];
+
+let current = 0;
+let furiganaOn = true;
+let fontSize = 20;
+
+const rundownEl = document.getElementById('rundown');
+const stageEl = document.getElementById('stage');
+const progressFill = document.getElementById('progressFill');
+
+function renderRundown(){
+  const items = segments.map((s,i)=>`
+    <div class="rd-item ${i===current?'active':''}" data-i="${i}">
+      <div class="rd-num mono">${s.num}</div>
+      <div class="rd-icon">${ICONS[s.icon]}</div>
+      <div class="rd-text">
+        <div class="rd-jp">${s.jp}</div>
+        <div class="rd-en">${s.en}</div>
+        <div class="rd-time">${s.time} &middot; ${s.dur}</div>
+      </div>
+    </div>
+  `).join('');
+  rundownEl.innerHTML = `<div class="rundown-head">Rundown &middot; 全6セグメント</div>${items}`;
+  rundownEl.querySelectorAll('.rd-item').forEach(el=>{
+    el.addEventListener('click', ()=>{ current = parseInt(el.dataset.i); renderStage(); renderRundown(); });
+  });
+}
+
+function renderStage(){
+  const s = segments[current];
+  let vocabHtml = '';
+  if(s.vocab){
+    vocabHtml = `
+      <div class="block">
+        <span class="block-label vocab">📖 単語 &middot; Vocabulary</span>
+        <table class="vocab-table">
+          ${s.vocab.map(v=>`<tr><td class="term">${v[0]}</td><td class="meaning">${v[1]}</td></tr>`).join('')}
+        </table>
+      </div>`;
+  }
+  let phrasesHtml = '';
+  if(s.phrases){
+    phrasesHtml = `
+      <div class="block">
+        <span class="block-label vocab">🗣 便利な表現 &middot; Useful Phrases</span>
+        <table class="phrase-table">
+          ${s.phrases.map(p=>`<tr><td>${p[0]}</td><td>${p[1]}</td></tr>`).join('')}
+        </table>
+      </div>`;
+  }
+  const reactionHtml = `
+    <div class="block">
+      <span class="block-label reaction">🔁 リアクション &middot; Read This Aloud</span>
+      <div class="reaction-box">
+        <ol>${s.reaction.map(p=>`<li>${p}</li>`).join('')}</ol>
+      </div>
+    </div>`;
+
+  stageEl.innerHTML = `
+    <div class="stage-head">
+      <div>
+        <h2>${s.num}｜${s.jp}</h2>
+        <div class="en-sub">${s.en}</div>
+      </div>
+      <div class="time-chip mono">${s.time}</div>
+    </div>
+    <div class="block">
+      <span class="block-label narr">🎙 ナレーション &middot; Narration</span>
+      <div class="narration-text">${s.narration}</div>
+    </div>
+    ${vocabHtml}
+    ${phrasesHtml}
+    ${reactionHtml}
+    <div class="stage-nav">
+      <button id="prevBtn" ${current===0?'disabled':''}>← Prev</button>
+      <div class="count mono">${s.num} / 06</div>
+      <button id="nextBtn" ${current===segments.length-1?'disabled':''}>Next →</button>
+    </div>
+  `;
+  stageEl.classList.toggle('no-furigana', !furiganaOn);
+  stageEl.style.setProperty('--fs', fontSize+'px');
+  progressFill.style.width = (((current+1)/segments.length)*100)+'%';
+
+  document.getElementById('prevBtn').addEventListener('click', ()=>{ if(current>0){current--; renderStage(); renderRundown();}});
+  document.getElementById('nextBtn').addEventListener('click', ()=>{ if(current<segments.length-1){current++; renderStage(); renderRundown();}});
+}
+
+document.getElementById('furiSwitch').addEventListener('click', function(){
+  furiganaOn = !furiganaOn;
+  this.classList.toggle('on', furiganaOn);
+  stageEl.classList.toggle('no-furigana', !furiganaOn);
+});
+document.getElementById('fontUp').addEventListener('click', ()=>{ fontSize = Math.min(fontSize+2, 30); stageEl.style.setProperty('--fs', fontSize+'px'); });
+document.getElementById('fontDown').addEventListener('click', ()=>{ fontSize = Math.max(fontSize-2, 15); stageEl.style.setProperty('--fs', fontSize+'px'); });
+
+renderRundown();
+renderStage();
+</script>
+</body>
+</html>
