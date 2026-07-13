@@ -576,20 +576,37 @@ function makeUtterance(text){
   if(voice) u.voice = voice;
   return u;
 }
-function speak(text){
-  if(!('speechSynthesis' in window) || !text) return;
+// Plays a pre-rendered Google TTS clip when one exists for this line; falls back to the
+// browser's built-in voice (speak) if the file is missing or fails to load, so a bad/absent
+// audio/ commit never breaks playback, just downgrades its quality for that line.
+let currentAudio = null;
+function stopAllAudio(){
   window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(makeUtterance(text));
+  if(currentAudio){ currentAudio.pause(); currentAudio = null; }
 }
-function speakSequence(texts){
-  if(!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
+function speakFallback(text, onDone){
+  if(!('speechSynthesis' in window) || !text){ onDone(); return; }
+  const u = makeUtterance(text);
+  u.onend = onDone;
+  window.speechSynthesis.speak(u);
+}
+function playItem(text, audioSrc, onDone){
+  onDone = onDone || function(){};
+  if(!audioSrc){ speakFallback(text, onDone); return; }
+  const audio = new Audio(audioSrc);
+  audio.playbackRate = speechRate;
+  currentAudio = audio;
+  audio.addEventListener('ended', ()=>{ currentAudio = null; onDone(); });
+  audio.addEventListener('error', ()=>{ currentAudio = null; speakFallback(text, onDone); });
+  audio.play().catch(()=>{ currentAudio = null; speakFallback(text, onDone); });
+}
+function playSequence(items){
+  stopAllAudio();
   let i = 0;
   function next(){
-    if(i >= texts.length) return;
-    const u = makeUtterance(texts[i]);
-    u.onend = ()=>{ i++; next(); };
-    window.speechSynthesis.speak(u);
+    if(i >= items.length) return;
+    const item = items[i];
+    playItem(item.text, item.audioSrc, ()=>{ i++; next(); });
   }
   next();
 }
@@ -612,7 +629,7 @@ function renderRundown(){
   `).join('');
   rundownEl.innerHTML = `<div class="rundown-head">Rundown &middot; 全6セグメント</div>${items}`;
   rundownEl.querySelectorAll('.rd-item').forEach(el=>{
-    el.addEventListener('click', ()=>{ window.speechSynthesis.cancel(); current = parseInt(el.dataset.i); renderStage(); renderRundown(); });
+    el.addEventListener('click', ()=>{ stopAllAudio(); current = parseInt(el.dataset.i); renderStage(); renderRundown(); });
   });
 }
 
@@ -674,18 +691,30 @@ function renderStage(){
   stageEl.style.setProperty('--fs', fontSize+'px');
   progressFill.style.width = (((current+1)/segments.length)*100)+'%';
 
-  document.getElementById('prevBtn').addEventListener('click', ()=>{ window.speechSynthesis.cancel(); if(current>0){current--; renderStage(); renderRundown();}});
-  document.getElementById('nextBtn').addEventListener('click', ()=>{ window.speechSynthesis.cancel(); if(current<segments.length-1){current++; renderStage(); renderRundown();}});
+  document.getElementById('prevBtn').addEventListener('click', ()=>{ stopAllAudio(); if(current>0){current--; renderStage(); renderRundown();}});
+  document.getElementById('nextBtn').addEventListener('click', ()=>{ stopAllAudio(); if(current<segments.length-1){current++; renderStage(); renderRundown();}});
 
-  // voice-over: a speaker button per narration paragraph and per reaction line, plus a "play whole segment" button
-  const speakTexts = [];
-  stageEl.querySelectorAll('.narration-text p, .reaction-box li').forEach(el=>{
+  // voice-over: a speaker button per narration paragraph and per reaction line, plus a "play whole segment" button.
+  // Each line plays its pre-rendered audio/*.mp3 (s.audio.narration[i] / s.audio.reaction[i]) when the
+  // day's TTS step produced one, otherwise falls back to the browser voice — see playItem().
+  const speakItems = [];
+  const audioNarration = (s.audio && s.audio.narration) || [];
+  const audioReaction = (s.audio && s.audio.reaction) || [];
+  stageEl.querySelectorAll('.narration-text p').forEach((el,i)=>{
     const text = stripRuby(el.innerHTML);
-    speakTexts.push(text);
+    const audioSrc = audioNarration[i];
+    speakItems.push({text, audioSrc});
     el.insertAdjacentHTML('afterbegin', '<button class="speak-btn" type="button" aria-label="Play">🔊</button>');
-    el.querySelector('.speak-btn').addEventListener('click', ()=>speak(text));
+    el.querySelector('.speak-btn').addEventListener('click', ()=>{ stopAllAudio(); playItem(text, audioSrc); });
   });
-  document.getElementById('playAllBtn').addEventListener('click', ()=>speakSequence(speakTexts));
+  stageEl.querySelectorAll('.reaction-box li').forEach((el,i)=>{
+    const text = stripRuby(el.innerHTML);
+    const audioSrc = audioReaction[i];
+    speakItems.push({text, audioSrc});
+    el.insertAdjacentHTML('afterbegin', '<button class="speak-btn" type="button" aria-label="Play">🔊</button>');
+    el.querySelector('.speak-btn').addEventListener('click', ()=>{ stopAllAudio(); playItem(text, audioSrc); });
+  });
+  document.getElementById('playAllBtn').addEventListener('click', ()=>playSequence(speakItems));
 }
 
 document.getElementById('furiSwitch').addEventListener('click', function(){
@@ -700,7 +729,7 @@ document.getElementById('speedBtn').addEventListener('click', function(){
   speechRate = RATES[(RATES.indexOf(speechRate)+1) % RATES.length];
   this.textContent = `Speed ${speechRate}×`;
 });
-document.getElementById('stopSpeechBtn').addEventListener('click', ()=>window.speechSynthesis.cancel());
+document.getElementById('stopSpeechBtn').addEventListener('click', stopAllAudio);
 
 renderRundown();
 renderStage();
