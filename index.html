@@ -450,16 +450,26 @@ const segments = [
   {
     num:'01', time:'00:00–00:45', dur:'0:45',
     jp:'オープニング', en:'Opening', icon:'mic',
-    narration:`<p>みなさん、こんにちは！<ruby>今日<rt>きょう</rt></ruby>は2026<ruby>年<rt>ねん</rt></ruby>7<ruby>月<rt>がつ</rt></ruby>14<ruby>日<rt>にち</rt></ruby>、<ruby>火曜日<rt>かようび</rt></ruby>です。<ruby>今日<rt>きょう</rt></ruby>も<ruby>日本<rt>にほん</rt></ruby>のニュースを<ruby>三<rt>みっ</rt></ruby>つ<ruby>紹介<rt>しょうかい</rt></ruby>します。<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>の<ruby>影響<rt>えいきょう</rt></ruby>で<ruby>大雨<rt>おおあめ</rt></ruby>のおそれがあるという<ruby>天気<rt>てんき</rt></ruby>のニュース、バドミントンのジャパンオープンで<ruby>渡辺勇大<rt>わたなべゆうた</rt></ruby>・<ruby>田口真彩<rt>たぐちまあや</rt></ruby>ペアが1<ruby>回戦<rt>かいせん</rt></ruby>を<ruby>突破<rt>とっぱ</rt></ruby>したニュース、そして「ももいろクローバーZ」の<ruby>百田夏菜子<rt>ももたかなこ</rt></ruby>さんの<ruby>誕生日<rt>たんじょうび</rt></ruby>のニュースです。それでは、<ruby>始<rt>はじ</rt></ruby>めましょう！</p>`,
+    narration:[
+      `みなさん、こんにちは！`,
+      `<ruby>今日<rt>きょう</rt></ruby>は2026<ruby>年<rt>ねん</rt></ruby>7<ruby>月<rt>がつ</rt></ruby>14<ruby>日<rt>にち</rt></ruby>、<ruby>火曜日<rt>かようび</rt></ruby>です。`,
+      `<ruby>今日<rt>きょう</rt></ruby>も<ruby>日本<rt>にほん</rt></ruby>のニュースを<ruby>三<rt>みっ</rt></ruby>つ<ruby>紹介<rt>しょうかい</rt></ruby>します。`,
+      `<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>の<ruby>影響<rt>えいきょう</rt></ruby>で<ruby>大雨<rt>おおあめ</rt></ruby>のおそれがあるという<ruby>天気<rt>てんき</rt></ruby>のニュース、バドミントンのジャパンオープンで<ruby>渡辺勇大<rt>わたなべゆうた</rt></ruby>・<ruby>田口真彩<rt>たぐちまあや</rt></ruby>ペアが1<ruby>回戦<rt>かいせん</rt></ruby>を<ruby>突破<rt>とっぱ</rt></ruby>したニュース、そして「ももいろクローバーZ」の<ruby>百田夏菜子<rt>ももたかなこ</rt></ruby>さんの<ruby>誕生日<rt>たんじょうび</rt></ruby>のニュースです。`,
+      `それでは、<ruby>始<rt>はじ</rt></ruby>めましょう！`
+    ],
     vocab:null,
     reaction:[`<ruby>今日<rt>きょう</rt></ruby>も<ruby>元気<rt>げんき</rt></ruby>です。<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>練習<rt>れんしゅう</rt></ruby>、<ruby>頑張<rt>がんば</rt></ruby>ります！`],
-    audio:{ narration:['audio/01-narration-1.mp3'], reaction:['audio/01-reaction-1.mp3'] }
+    audio:{ narration:['audio/01-narration-1.mp3','audio/01-narration-2.mp3','audio/01-narration-3.mp3','audio/01-narration-4.mp3','audio/01-narration-5.mp3'], reaction:['audio/01-reaction-1.mp3'] }
   },
   {
     num:'02', time:'00:45–03:15', dur:'2:30',
     jp:'ニュース① 台風9号、日本海で温帯低気圧に　北日本は大雨のおそれ', en:'Typhoon Barbie Weakens Over the Sea of Japan, Heavy Rain Risk in Northern Japan', icon:'typhoon',
-    narration:`<p><ruby>気象庁<rt>きしょうちょう</rt></ruby>によりますと、<ruby>台風<rt>たいふう</rt></ruby>11<ruby>号<rt>ごう</rt></ruby>「ハイシェン」は14<ruby>日<rt>にち</rt></ruby>の<ruby>午前<rt>ごぜん</rt></ruby>9<ruby>時<rt>じ</rt></ruby>に<ruby>熱帯低気圧<rt>ねったいていきあつ</rt></ruby>に<ruby>変<rt>か</rt></ruby>わりました。一<ruby>方<rt>ぽう</rt></ruby>、<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>「バービー」は<ruby>黄海<rt>こうかい</rt></ruby>を<ruby>時速<rt>じそく</rt></ruby>30キロの<ruby>速<rt>はや</rt></ruby>さで<ruby>東北東<rt>とうほくとう</rt></ruby>へ<ruby>進<rt>すす</rt></ruby>んでいて、15<ruby>日<rt>にち</rt></ruby>には<ruby>日本海<rt>にほんかい</rt></ruby>で<ruby>温帯低気圧<rt>おんたいていきあつ</rt></ruby>に<ruby>変<rt>か</rt></ruby>わる<ruby>見込<rt>みこ</rt></ruby>みです。</p>
-    <p>この<ruby>低気圧<rt>ていきあつ</rt></ruby>は16<ruby>日<rt>にち</rt></ruby>にかけて<ruby>間宮海峡<rt>まみやかいきょう</rt></ruby><ruby>付近<rt>ふきん</rt></ruby>に<ruby>進<rt>すす</rt></ruby>み、<ruby>伴<rt>ともな</rt></ruby>う<ruby>前線<rt>ぜんせん</rt></ruby>が<ruby>北日本<rt>きたにほん</rt></ruby>から<ruby>東日本<rt>ひがしにほん</rt></ruby>を<ruby>通過<rt>つうか</rt></ruby>する<ruby>見通<rt>みとお</rt></ruby>しです。<ruby>暖<rt>あたた</rt></ruby>かく<ruby>湿<rt>しめ</rt></ruby>った<ruby>空気<rt>くうき</rt></ruby>が<ruby>流<rt>なが</rt></ruby>れ<ruby>込<rt>こ</rt></ruby>む<ruby>影響<rt>えいきょう</rt></ruby>で<ruby>大気<rt>たいき</rt></ruby>の<ruby>状態<rt>じょうたい</rt></ruby>が<ruby>不安定<rt>ふあんてい</rt></ruby>となり、<ruby>雷<rt>かみなり</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>う<ruby>激<rt>はげ</rt></ruby>しい<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>る<ruby>所<rt>ところ</rt></ruby>もありそうです。</p>`,
+    narration:[
+      `<ruby>気象庁<rt>きしょうちょう</rt></ruby>によりますと、<ruby>台風<rt>たいふう</rt></ruby>11<ruby>号<rt>ごう</rt></ruby>「ハイシェン」は14<ruby>日<rt>にち</rt></ruby>の<ruby>午前<rt>ごぜん</rt></ruby>9<ruby>時<rt>じ</rt></ruby>に<ruby>熱帯低気圧<rt>ねったいていきあつ</rt></ruby>に<ruby>変<rt>か</rt></ruby>わりました。`,
+      `一<ruby>方<rt>ぽう</rt></ruby>、<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>「バービー」は<ruby>黄海<rt>こうかい</rt></ruby>を<ruby>時速<rt>じそく</rt></ruby>30キロの<ruby>速<rt>はや</rt></ruby>さで<ruby>東北東<rt>とうほくとう</rt></ruby>へ<ruby>進<rt>すす</rt></ruby>んでいて、15<ruby>日<rt>にち</rt></ruby>には<ruby>日本海<rt>にほんかい</rt></ruby>で<ruby>温帯低気圧<rt>おんたいていきあつ</rt></ruby>に<ruby>変<rt>か</rt></ruby>わる<ruby>見込<rt>みこ</rt></ruby>みです。`,
+      `この<ruby>低気圧<rt>ていきあつ</rt></ruby>は16<ruby>日<rt>にち</rt></ruby>にかけて<ruby>間宮海峡<rt>まみやかいきょう</rt></ruby><ruby>付近<rt>ふきん</rt></ruby>に<ruby>進<rt>すす</rt></ruby>み、<ruby>伴<rt>ともな</rt></ruby>う<ruby>前線<rt>ぜんせん</rt></ruby>が<ruby>北日本<rt>きたにほん</rt></ruby>から<ruby>東日本<rt>ひがしにほん</rt></ruby>を<ruby>通過<rt>つうか</rt></ruby>する<ruby>見通<rt>みとお</rt></ruby>しです。`,
+      `<ruby>暖<rt>あたた</rt></ruby>かく<ruby>湿<rt>しめ</rt></ruby>った<ruby>空気<rt>くうき</rt></ruby>が<ruby>流<rt>なが</rt></ruby>れ<ruby>込<rt>こ</rt></ruby>む<ruby>影響<rt>えいきょう</rt></ruby>で<ruby>大気<rt>たいき</rt></ruby>の<ruby>状態<rt>じょうたい</rt></ruby>が<ruby>不安定<rt>ふあんてい</rt></ruby>となり、<ruby>雷<rt>かみなり</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>う<ruby>激<rt>はげ</rt></ruby>しい<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>る<ruby>所<rt>ところ</rt></ruby>もありそうです。`
+    ],
     vocab:[
       [`<ruby>台風<rt>たいふう</rt></ruby>`,'typhoon'],
       [`<ruby>熱帯低気圧<rt>ねったいていきあつ</rt></ruby>`,'tropical depression'],
@@ -474,13 +484,17 @@ const segments = [
       `<ruby>北日本<rt>きたにほん</rt></ruby>の<ruby>方<rt>かた</rt></ruby>は<ruby>特<rt>とく</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけてほしいです。`,
       `<ruby>雷<rt>かみなり</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>う<ruby>激<rt>はげ</rt></ruby>しい<ruby>雨<rt>あめ</rt></ruby>には、<ruby>私<rt>わたし</rt></ruby>もいつも<ruby>驚<rt>おどろ</rt></ruby>かされます。`
     ],
-    audio:{ narration:['audio/02-narration-1.mp3','audio/02-narration-2.mp3'], reaction:['audio/02-reaction-1.mp3','audio/02-reaction-2.mp3','audio/02-reaction-3.mp3'] }
+    audio:{ narration:['audio/02-narration-1.mp3','audio/02-narration-2.mp3','audio/02-narration-3.mp3','audio/02-narration-4.mp3'], reaction:['audio/02-reaction-1.mp3','audio/02-reaction-2.mp3','audio/02-reaction-3.mp3'] }
   },
   {
     num:'03', time:'03:15–06:00', dur:'2:45',
     jp:'ニュース② バドミントン、渡辺勇大・田口真彩ペアがジャパンオープン1回戦突破', en:'Badminton: Watanabe-Taguchi Pair Wins Opening Match at Japan Open', icon:'baseball',
-    narration:`<p><ruby>世界<rt>せかい</rt></ruby>のトップ<ruby>選手<rt>せんしゅ</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まるバドミントンの「ジャパンオープン2026」が<ruby>東京体育館<rt>とうきょうたいいくかん</rt></ruby>で<ruby>開幕<rt>かいまく</rt></ruby>しました。<ruby>混合<rt>こんごう</rt></ruby>ダブルスでは、オリンピック2<ruby>大会<rt>たいかい</rt></ruby><ruby>連続<rt>れんぞく</rt></ruby>で<ruby>銅<rt>どう</rt></ruby>メダルを<ruby>獲得<rt>かくとく</rt></ruby>した<ruby>渡辺勇大<rt>わたなべゆうた</rt></ruby>さんが、<ruby>今大会<rt>こんたいかい</rt></ruby>が<ruby>初出場<rt>はつしゅつじょう</rt></ruby>の<ruby>田口真彩<rt>たぐちまあや</rt></ruby>さんとペアを<ruby>組<rt>く</rt></ruby>み、1<ruby>回戦<rt>かいせん</rt></ruby>で<ruby>台湾<rt>たいわん</rt></ruby>ペアに2<ruby>対<rt>たい</rt></ruby>0で<ruby>快勝<rt>かいしょう</rt></ruby>しました。</p>
-    <p>2<ruby>ゲーム<rt>げーむ</rt></ruby>とも<ruby>序盤<rt>じょばん</rt></ruby>はリードを<ruby>許<rt>ゆる</rt></ruby>す<ruby>苦<rt>くる</rt></ruby>しい<ruby>展開<rt>てんかい</rt></ruby>でしたが、そのたびに<ruby>連続<rt>れんぞく</rt></ruby><ruby>得点<rt>とくてん</rt></ruby>で<ruby>逆転<rt>ぎゃくてん</rt></ruby>し、ストレート<ruby>勝<rt>が</rt></ruby>ちで1<ruby>回戦<rt>かいせん</rt></ruby>を<ruby>突破<rt>とっぱ</rt></ruby>しました。<ruby>初出場<rt>はつしゅつじょう</rt></ruby>の<ruby>田口<rt>たぐち</rt></ruby>さんは「<ruby>緊張<rt>きんちょう</rt></ruby>もありましたけど、<ruby>良<rt>よ</rt></ruby>い<ruby>部分<rt>ぶぶん</rt></ruby>を<ruby>出<rt>だ</rt></ruby>せたかな」と<ruby>話<rt>はな</rt></ruby>しています。</p>`,
+    narration:[
+      `<ruby>世界<rt>せかい</rt></ruby>のトップ<ruby>選手<rt>せんしゅ</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まるバドミントンの「ジャパンオープン2026」が<ruby>東京体育館<rt>とうきょうたいいくかん</rt></ruby>で<ruby>開幕<rt>かいまく</rt></ruby>しました。`,
+      `<ruby>混合<rt>こんごう</rt></ruby>ダブルスでは、オリンピック2<ruby>大会<rt>たいかい</rt></ruby><ruby>連続<rt>れんぞく</rt></ruby>で<ruby>銅<rt>どう</rt></ruby>メダルを<ruby>獲得<rt>かくとく</rt></ruby>した<ruby>渡辺勇大<rt>わたなべゆうた</rt></ruby>さんが、<ruby>今大会<rt>こんたいかい</rt></ruby>が<ruby>初出場<rt>はつしゅつじょう</rt></ruby>の<ruby>田口真彩<rt>たぐちまあや</rt></ruby>さんとペアを<ruby>組<rt>く</rt></ruby>み、1<ruby>回戦<rt>かいせん</rt></ruby>で<ruby>台湾<rt>たいわん</rt></ruby>ペアに2<ruby>対<rt>たい</rt></ruby>0で<ruby>快勝<rt>かいしょう</rt></ruby>しました。`,
+      `2<ruby>ゲーム<rt>げーむ</rt></ruby>とも<ruby>序盤<rt>じょばん</rt></ruby>はリードを<ruby>許<rt>ゆる</rt></ruby>す<ruby>苦<rt>くる</rt></ruby>しい<ruby>展開<rt>てんかい</rt></ruby>でしたが、そのたびに<ruby>連続<rt>れんぞく</rt></ruby><ruby>得点<rt>とくてん</rt></ruby>で<ruby>逆転<rt>ぎゃくてん</rt></ruby>し、ストレート<ruby>勝<rt>が</rt></ruby>ちで1<ruby>回戦<rt>かいせん</rt></ruby>を<ruby>突破<rt>とっぱ</rt></ruby>しました。`,
+      `<ruby>初出場<rt>はつしゅつじょう</rt></ruby>の<ruby>田口<rt>たぐち</rt></ruby>さんは「<ruby>緊張<rt>きんちょう</rt></ruby>もありましたけど、<ruby>良<rt>よ</rt></ruby>い<ruby>部分<rt>ぶぶん</rt></ruby>を<ruby>出<rt>だ</rt></ruby>せたかな」と<ruby>話<rt>はな</rt></ruby>しています。`
+    ],
     vocab:[
       [`<ruby>開幕<rt>かいまく</rt></ruby>する`,'to open (a tournament)'],
       [`<ruby>混合<rt>こんごう</rt></ruby>ダブルス`,'mixed doubles'],
@@ -495,13 +509,16 @@ const segments = [
       `<ruby>初出場<rt>はつしゅつじょう</rt></ruby>で<ruby>緊張<rt>きんちょう</rt></ruby>しながらも<ruby>勝<rt>か</rt></ruby>てた<ruby>田口<rt>たぐち</rt></ruby>さんはすごいと<ruby>思<rt>おも</rt></ruby>います。`,
       `<ruby>次<rt>つぎ</rt></ruby>の<ruby>試合<rt>しあい</rt></ruby>も<ruby>応援<rt>おうえん</rt></ruby>したいです。`
     ],
-    audio:{ narration:['audio/03-narration-1.mp3','audio/03-narration-2.mp3'], reaction:['audio/03-reaction-1.mp3','audio/03-reaction-2.mp3','audio/03-reaction-3.mp3'] }
+    audio:{ narration:['audio/03-narration-1.mp3','audio/03-narration-2.mp3','audio/03-narration-3.mp3','audio/03-narration-4.mp3'], reaction:['audio/03-reaction-1.mp3','audio/03-reaction-2.mp3','audio/03-reaction-3.mp3'] }
   },
   {
     num:'04', time:'06:00–08:30', dur:'2:30',
     jp:'ニュース③ ももいろクローバーZ・百田夏菜子さんが32歳の誕生日を報告', en:'Momoiro Clover Z’s Kanako Momota Celebrates Her 32nd Birthday', icon:'torii',
-    narration:`<p>アイドルグループ「ももいろクローバーZ」の<ruby>百田夏菜子<rt>ももたかなこ</rt></ruby>さんが、<ruby>自身<rt>じしん</rt></ruby>のインスタグラムで32<ruby>歳<rt>さい</rt></ruby>の<ruby>誕生日<rt>たんじょうび</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えたことを<ruby>報告<rt>ほうこく</rt></ruby>しました。<ruby>百田<rt>ももた</rt></ruby>さんは、お<ruby>団子<rt>だんご</rt></ruby>ヘアに「HAPPY BIRTHDAY」と<ruby>飾<rt>かざ</rt></ruby>られたサングラスをかけてはしゃぐ<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>投稿<rt>とうこう</rt></ruby>しました。</p>
-    <p>「たくさんの<ruby>愛<rt>あい</rt></ruby>を、いつも<ruby>本当<rt>ほんとう</rt></ruby>にありがとうっっ」とシンプルに<ruby>思<rt>おも</rt></ruby>いを<ruby>伝<rt>つた</rt></ruby>えた<ruby>百田<rt>ももた</rt></ruby>さんに、フォロワーからは「アイドルでいてくれてありがとう」「これからもずっと<ruby>推<rt>お</rt></ruby>し<ruby>続<rt>つづ</rt></ruby>けます」など、<ruby>数多<rt>かずおお</rt></ruby>くの<ruby>祝福<rt>しゅくふく</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まっています。</p>`,
+    narration:[
+      `アイドルグループ「ももいろクローバーZ」の<ruby>百田夏菜子<rt>ももたかなこ</rt></ruby>さんが、<ruby>自身<rt>じしん</rt></ruby>のインスタグラムで32<ruby>歳<rt>さい</rt></ruby>の<ruby>誕生日<rt>たんじょうび</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えたことを<ruby>報告<rt>ほうこく</rt></ruby>しました。`,
+      `<ruby>百田<rt>ももた</rt></ruby>さんは、お<ruby>団子<rt>だんご</rt></ruby>ヘアに「HAPPY BIRTHDAY」と<ruby>飾<rt>かざ</rt></ruby>られたサングラスをかけてはしゃぐ<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>投稿<rt>とうこう</rt></ruby>しました。`,
+      `「たくさんの<ruby>愛<rt>あい</rt></ruby>を、いつも<ruby>本当<rt>ほんとう</rt></ruby>にありがとうっっ」とシンプルに<ruby>思<rt>おも</rt></ruby>いを<ruby>伝<rt>つた</rt></ruby>えた<ruby>百田<rt>ももた</rt></ruby>さんに、フォロワーからは「アイドルでいてくれてありがとう」「これからもずっと<ruby>推<rt>お</rt></ruby>し<ruby>続<rt>つづ</rt></ruby>けます」など、<ruby>数多<rt>かずおお</rt></ruby>くの<ruby>祝福<rt>しゅくふく</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まっています。`
+    ],
     vocab:[
       [`<ruby>誕生日<rt>たんじょうび</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>える`,'to reach one’s birthday'],
       [`<ruby>報告<rt>ほうこく</rt></ruby>する`,'to report, announce'],
@@ -515,12 +532,15 @@ const segments = [
       `フォロワーからの<ruby>祝福<rt>しゅくふく</rt></ruby>のコメントを<ruby>読<rt>よ</rt></ruby>んで、ほっこりしました。`,
       `お<ruby>誕生日<rt>たんじょうび</rt></ruby>おめでとうございます、と<ruby>私<rt>わたし</rt></ruby>も<ruby>伝<rt>つた</rt></ruby>えたいです。`
     ],
-    audio:{ narration:['audio/04-narration-1.mp3','audio/04-narration-2.mp3'], reaction:['audio/04-reaction-1.mp3','audio/04-reaction-2.mp3','audio/04-reaction-3.mp3'] }
+    audio:{ narration:['audio/04-narration-1.mp3','audio/04-narration-2.mp3','audio/04-narration-3.mp3'], reaction:['audio/04-reaction-1.mp3','audio/04-reaction-2.mp3','audio/04-reaction-3.mp3'] }
   },
   {
     num:'05', time:'08:30–09:30', dur:'1:00',
     jp:'まとめ＆フリートーク', en:'Recap & Free Talk', icon:'wrap',
-    narration:`<p><ruby>今日<rt>きょう</rt></ruby>は<ruby>三<rt>みっ</rt></ruby>つのニュースを<ruby>紹介<rt>しょうかい</rt></ruby>しました。<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>による<ruby>大雨<rt>おおあめ</rt></ruby>のおそれ、バドミントン<ruby>渡辺<rt>わたなべ</rt></ruby>・<ruby>田口<rt>たぐち</rt></ruby>ペアのジャパンオープン1<ruby>回戦<rt>かいせん</rt></ruby><ruby>突破<rt>とっぱ</rt></ruby>、そして「ももいろクローバーZ」<ruby>百田夏菜子<rt>ももたかなこ</rt></ruby>さんの<ruby>誕生日<rt>たんじょうび</rt></ruby>のニュースです。</p>`,
+    narration:[
+      `<ruby>今日<rt>きょう</rt></ruby>は<ruby>三<rt>みっ</rt></ruby>つのニュースを<ruby>紹介<rt>しょうかい</rt></ruby>しました。`,
+      `<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>による<ruby>大雨<rt>おおあめ</rt></ruby>のおそれ、バドミントン<ruby>渡辺<rt>わたなべ</rt></ruby>・<ruby>田口<rt>たぐち</rt></ruby>ペアのジャパンオープン1<ruby>回戦<rt>かいせん</rt></ruby><ruby>突破<rt>とっぱ</rt></ruby>、そして「ももいろクローバーZ」<ruby>百田夏菜子<rt>ももたかなこ</rt></ruby>さんの<ruby>誕生日<rt>たんじょうび</rt></ruby>のニュースです。`
+    ],
     vocab:null,
     phrases:[
       ['〜と<ruby>思<rt>おも</rt></ruby>います','I think that ~'],
@@ -533,17 +553,22 @@ const segments = [
       `<ruby>今日<rt>きょう</rt></ruby>のニュースの<ruby>中<rt>なか</rt></ruby>で、<ruby>一番<rt>いちばん</rt></ruby><ruby>印象的<rt>いんしょうてき</rt></ruby>だったのは、バドミントン<ruby>渡辺<rt>わたなべ</rt></ruby>・<ruby>田口<rt>たぐち</rt></ruby>ペアの<ruby>快勝<rt>かいしょう</rt></ruby>です。`,
       `<ruby>理由<rt>りゆう</rt></ruby>は、<ruby>初出場<rt>はつしゅつじょう</rt></ruby>の<ruby>田口<rt>たぐち</rt></ruby>さんが<ruby>緊張<rt>きんちょう</rt></ruby>を<ruby>乗<rt>の</rt></ruby>り<ruby>越<rt>こ</rt></ruby>えたことに<ruby>感動<rt>かんどう</rt></ruby>したからです。`
     ],
-    audio:{ narration:['audio/05-narration-1.mp3'], reaction:['audio/05-reaction-1.mp3','audio/05-reaction-2.mp3'] }
+    audio:{ narration:['audio/05-narration-1.mp3','audio/05-narration-2.mp3'], reaction:['audio/05-reaction-1.mp3','audio/05-reaction-2.mp3'] }
   },
   {
     num:'06', time:'09:30–10:00', dur:'0:30',
     jp:'クロージング', en:'Closing', icon:'flag',
-    narration:`<p><ruby>今日<rt>きょう</rt></ruby>のニュース<ruby>練習<rt>れんしゅう</rt></ruby>はここまでです。お<ruby>疲れ様<rt>つかれさま</rt></ruby>でした！<ruby>明日<rt>あした</rt></ruby>もまた<ruby>新<rt>あたら</rt></ruby>しいニュースで<ruby>練習<rt>れんしゅう</rt></ruby>しましょう。それでは、また！</p>`,
+    narration:[
+      `<ruby>今日<rt>きょう</rt></ruby>のニュース<ruby>練習<rt>れんしゅう</rt></ruby>はここまでです。`,
+      `お<ruby>疲れ様<rt>つかれさま</rt></ruby>でした！`,
+      `<ruby>明日<rt>あした</rt></ruby>もまた<ruby>新<rt>あたら</rt></ruby>しいニュースで<ruby>練習<rt>れんしゅう</rt></ruby>しましょう。`,
+      `それでは、また！`
+    ],
     vocab:null,
     reaction:[
       `<ruby>今日<rt>きょう</rt></ruby>も<ruby>頑張<rt>がんば</rt></ruby>りました。<ruby>明日<rt>あした</rt></ruby>も<ruby>頑張<rt>がんば</rt></ruby>ります。`
     ],
-    audio:{ narration:['audio/06-narration-1.mp3'], reaction:['audio/06-reaction-1.mp3'] }
+    audio:{ narration:['audio/06-narration-1.mp3','audio/06-narration-2.mp3','audio/06-narration-3.mp3','audio/06-narration-4.mp3'], reaction:['audio/06-reaction-1.mp3'] }
   }
 ];
 
@@ -681,7 +706,7 @@ function renderStage(){
     </div>
     <div class="block">
       <span class="block-label narr">🎙 ナレーション &middot; Narration</span>
-      <div class="narration-text">${s.narration}</div>
+      <div class="narration-text">${s.narration.map(t=>`<p>${t}</p>`).join('')}</div>
     </div>
     ${vocabHtml}
     ${phrasesHtml}
