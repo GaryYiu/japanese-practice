@@ -285,6 +285,16 @@
     letter-spacing:0.08em;
     color:var(--ink-soft);
   }
+  .source-link{
+    display:inline-block;
+    margin-top:8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--ai);
+    text-decoration:none;
+    border-bottom:1px dotted var(--ai);
+  }
+  .source-link:hover{color:var(--shu);border-bottom-color:var(--shu);}
   .time-chip{
     font-family:'IBM Plex Mono',monospace;
     font-size:12px;
@@ -390,7 +400,7 @@
       <p>A fully scripted read-aloud practice, built from the day's real news</p>
     </div>
     <div class="date-chip">
-      <strong>2026.07.15 (Wed)</strong>
+      <strong>2026.07.16 (Thu)</strong>
       TBS NEWS DIG
     </div>
   </header>
@@ -419,7 +429,7 @@
   <div class="layout">
     <!-- RUNDOWN -->
     <nav class="rundown" id="rundown">
-      <div class="rundown-head">Rundown &middot; 全6セグメント</div>
+      <div class="rundown-head">Rundown</div>
       <!-- items injected by JS -->
     </nav>
 
@@ -430,7 +440,7 @@
   </div>
 
   <footer>
-    Script generated from TBS NEWS DIG (newsdig.tbs.co.jp) &middot; stories dated 2026.07.15<br>
+    Script generated from TBS NEWS DIG (newsdig.tbs.co.jp) &middot; stories dated 2026.07.16<br>
     Toggle furigana off once a word feels automatic. Re-run this rundown with tomorrow's headlines to keep practice fresh.
   </footer>
 
@@ -443,7 +453,8 @@ const ICONS = {
   baseball: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M6.5 6c2 2 2 10 0 12M17.5 6c-2 2-2 10 0 12" stroke-dasharray="1.6 2"/></svg>',
   torii: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h18M4 5.2c1 .6 1 1.4 0 2M20 5.2c-1 .6-1 1.4 0 2"/><path d="M7 7v14M17 7v14"/><path d="M5.5 10h13"/></svg>',
   wrap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12a9 9 0 1 1-3.5-7.1"/><path d="M21 3v5h-5"/></svg>',
-  flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V4"/><path d="M5 4h13l-3 4 3 4H5"/></svg>'
+  flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V4"/><path d="M5 4h13l-3 4 3 4H5"/></svg>',
+  wallet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 9.5h18"/><circle cx="16.5" cy="14" r="1.3" fill="currentColor" stroke="none"/></svg>'
 };
 
 const segments = [
@@ -452,9 +463,9 @@ const segments = [
     jp:'オープニング', en:'Opening', icon:'mic',
     narration:[
       `みなさん、こんにちは！`,
-      `<ruby>今日<rt>きょう</rt></ruby>は2026<ruby>年<rt>ねん</rt></ruby>7<ruby>月<rt>がつ</rt></ruby>15<ruby>日<rt>にち</rt></ruby>、<ruby>水曜日<rt>すいようび</rt></ruby>です。`,
-      `<ruby>今日<rt>きょう</rt></ruby>も<ruby>日本<rt>にほん</rt></ruby>のニュースを<ruby>三<rt>みっ</rt></ruby>つ<ruby>紹介<rt>しょうかい</rt></ruby>します。`,
-      `<ruby>関東<rt>かんとう</rt></ruby>で<ruby>今年<rt>ことし</rt></ruby><ruby>初<rt>はじ</rt></ruby>めての<ruby>熱中症警戒<rt>ねっちゅうしょうけいかい</rt></ruby>アラートが<ruby>出<rt>で</rt></ruby>たという<ruby>天気<rt>てんき</rt></ruby>のニュース、MLBオールスターゲームで<ruby>村上宗隆<rt>むらかみむねたか</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>が<ruby>初打席<rt>はつだせき</rt></ruby>に<ruby>立<rt>た</rt></ruby>ったニュース、そして<ruby>俳優<rt>はいゆう</rt></ruby>の<ruby>菅田将暉<rt>すだまさき</rt></ruby>さんがチェーンソーで<ruby>氷<rt>こおり</rt></ruby>の<ruby>彫刻<rt>ちょうこく</rt></ruby>に<ruby>挑戦<rt>ちょうせん</rt></ruby>したニュースです。`,
+      `<ruby>今日<rt>きょう</rt></ruby>は2026<ruby>年<rt>ねん</rt></ruby>7<ruby>月<rt>がつ</rt></ruby>16<ruby>日<rt>にち</rt></ruby>、<ruby>木曜日<rt>もくようび</rt></ruby>です。`,
+      `<ruby>今日<rt>きょう</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>のニュースを<ruby>四<rt>よっ</rt></ruby>つ<ruby>紹介<rt>しょうかい</rt></ruby>します。`,
+      `<ruby>台風<rt>たいふう</rt></ruby>から<ruby>変<rt>か</rt></ruby>わった<ruby>低気圧<rt>ていきあつ</rt></ruby>による<ruby>大雨<rt>おおあめ</rt></ruby>と<ruby>土砂災害<rt>どしゃさいがい</rt></ruby><ruby>警戒<rt>けいかい</rt></ruby>のニュース、バレーボール<ruby>男子<rt>だんし</rt></ruby><ruby>日本代表<rt>にほんだいひょう</rt></ruby>がイタリアを<ruby>破<rt>やぶ</rt></ruby>って<ruby>決勝<rt>けっしょう</rt></ruby>ラウンド<ruby>進出<rt>しんしゅつ</rt></ruby>を<ruby>決<rt>き</rt></ruby>めたニュース、<ruby>櫻井翔<rt>さくらいしょう</rt></ruby>さんと<ruby>相葉雅紀<rt>あいばまさき</rt></ruby>さんが<ruby>新<rt>あたら</rt></ruby>しいファンクラブを<ruby>始<rt>はじ</rt></ruby>めたニュース、そして<ruby>山梨県<rt>やまなしけん</rt></ruby><ruby>身延町<rt>みのぶちょう</rt></ruby>の<ruby>地域<rt>ちいき</rt></ruby><ruby>特産<rt>とくさん</rt></ruby>クラフトビールのニュースです。`,
       `それでは、<ruby>始<rt>はじ</rt></ruby>めましょう！`
     ],
     vocab:null,
@@ -463,86 +474,117 @@ const segments = [
   },
   {
     num:'02', time:'00:45–03:15', dur:'2:30',
-    jp:'ニュース① 関東に今年初の熱中症警戒アラート　北日本は大雨のおそれ', en:"Kanto's First Heat Alert of the Year, Heavy Rain Risk in Northern Japan", icon:'typhoon',
+    jp:'ニュース① 台風9号由来の低気圧、北日本に大雨と土砂災害警戒', en:'Ex-Typhoon Low Brings Heavy Rain, Landslide Warning to Northern Japan', icon:'typhoon',
+    source:'https://newsdig.tbs.co.jp/articles/-/2805511',
     narration:[
-      `<ruby>今日<rt>きょう</rt></ruby>も<ruby>全国的<rt>ぜんこくてき</rt></ruby>に<ruby>厳<rt>きび</rt></ruby>しい<ruby>暑<rt>あつ</rt></ruby>さが<ruby>続<rt>つづ</rt></ruby>いていて、<ruby>東京<rt>とうきょう</rt></ruby>など<ruby>関東<rt>かんとう</rt></ruby>では<ruby>今年<rt>ことし</rt></ruby><ruby>初<rt>はじ</rt></ruby>めての<ruby>熱中症警戒<rt>ねっちゅうしょうけいかい</rt></ruby>アラートが<ruby>出<rt>で</rt></ruby>ました。`,
-      `<ruby>東北南部<rt>とうほくなんぶ</rt></ruby>から<ruby>九州<rt>きゅうしゅう</rt></ruby>にかけての<ruby>広<rt>ひろ</rt></ruby>い<ruby>範囲<rt>はんい</rt></ruby>でもアラートが<ruby>出<rt>で</rt></ruby>ていて、<ruby>出<rt>で</rt></ruby>ていない<ruby>地域<rt>ちいき</rt></ruby>でも<ruby>危険<rt>きけん</rt></ruby>な<ruby>暑<rt>あつ</rt></ruby>さになっているそうです。`,
-      `できるだけ<ruby>外出<rt>がいしゅつ</rt></ruby>を<ruby>控<rt>ひか</rt></ruby>えて、<ruby>部屋<rt>へや</rt></ruby>の<ruby>中<rt>なか</rt></ruby>はエアコンで<ruby>涼<rt>すず</rt></ruby>しくしておいたほうがいいですね。`,
-      `一<ruby>方<rt>ぽう</rt></ruby>で、<ruby>台風<rt>たいふう</rt></ruby>から<ruby>変<rt>か</rt></ruby>わった<ruby>低気圧<rt>ていきあつ</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づいている<ruby>東北<rt>とうほく</rt></ruby>や<ruby>北海道<rt>ほっかいどう</rt></ruby>では、<ruby>今夜<rt>こんや</rt></ruby>からあすの<ruby>朝<rt>あさ</rt></ruby>にかけて<ruby>大雨<rt>おおあめ</rt></ruby>になりそうです。`,
-      `<ruby>雷<rt>かみなり</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>った<ruby>激<rt>はげ</rt></ruby>しい<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>って、<ruby>川<rt>かわ</rt></ruby>の<ruby>増水<rt>ぞうすい</rt></ruby>や<ruby>土砂災害<rt>どしゃさいがい</rt></ruby>にも<ruby>注意<rt>ちゅうい</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>だということです。`
+      `<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>は、もう<ruby>台風<rt>たいふう</rt></ruby>じゃなくて<ruby>低気圧<rt>ていきあつ</rt></ruby>に<ruby>変<rt>か</rt></ruby>わったんですけど、<ruby>雨<rt>あめ</rt></ruby>の<ruby>心配<rt>しんぱい</rt></ruby>はまだ<ruby>続<rt>つづ</rt></ruby>いています。`,
+      `この<ruby>低気圧<rt>ていきあつ</rt></ruby>が<ruby>前線<rt>ぜんせん</rt></ruby>と<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>日本海<rt>にほんかい</rt></ruby>を<ruby>進<rt>すす</rt></ruby>んでいて、これから<ruby>北日本<rt>きたにほん</rt></ruby>を<ruby>通<rt>とお</rt></ruby>っていく<ruby>予定<rt>よてい</rt></ruby>です。`,
+      `<ruby>台風<rt>たいふう</rt></ruby>の<ruby>名残<rt>なごり</rt></ruby>の<ruby>湿<rt>しめ</rt></ruby>った<ruby>空気<rt>くうき</rt></ruby>が<ruby>流<rt>なが</rt></ruby>れ<ruby>込<rt>こ</rt></ruby>むせいで、<ruby>北日本<rt>きたにほん</rt></ruby>を<ruby>中心<rt>ちゅうしん</rt></ruby>に<ruby>大気<rt>たいき</rt></ruby>が<ruby>不安定<rt>ふあんてい</rt></ruby>になりやすいそうです。`,
+      `<ruby>雷<rt>かみなり</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>った<ruby>激<rt>はげ</rt></ruby>しい<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>る<ruby>所<rt>ところ</rt></ruby>もあって、<ruby>思<rt>おも</rt></ruby>ったより<ruby>雨<rt>あめ</rt></ruby>の<ruby>量<rt>りょう</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くなるかもしれません。`,
+      `<ruby>東北<rt>とうほく</rt></ruby>の<ruby>北<rt>きた</rt></ruby>の<ruby>方<rt>ほう</rt></ruby>は<ruby>地盤<rt>じばん</rt></ruby>が<ruby>緩<rt>ゆる</rt></ruby>んでいる<ruby>場所<rt>ばしょ</rt></ruby>もあるので、16<ruby>日<rt>にち</rt></ruby>にかけて<ruby>土砂災害<rt>どしゃさいがい</rt></ruby>や<ruby>川<rt>かわ</rt></ruby>の<ruby>増水<rt>ぞうすい</rt></ruby>にはかなり<ruby>気<rt>き</rt></ruby>をつけたほうがよさそうです。`
     ],
     vocab:[
-      [`<ruby>熱中症警戒<rt>ねっちゅうしょうけいかい</rt></ruby>アラート`,'heatstroke warning alert'],
-      [`<ruby>危険<rt>きけん</rt></ruby>な<ruby>暑<rt>あつ</rt></ruby>さ`,'dangerously hot weather'],
-      [`<ruby>外出<rt>がいしゅつ</rt></ruby>を<ruby>控<rt>ひか</rt></ruby>える`,'to refrain from going out'],
       [`<ruby>低気圧<rt>ていきあつ</rt></ruby>`,'low-pressure system'],
-      [`<ruby>雷<rt>かみなり</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>う`,'accompanied by thunder'],
-      [`<ruby>増水<rt>ぞうすい</rt></ruby>`,'rise in river water level'],
-      [`<ruby>土砂災害<rt>どしゃさいがい</rt></ruby>`,'landslide disaster']
+      [`<ruby>前線<rt>ぜんせん</rt></ruby>`,'weather front'],
+      [`<ruby>名残<rt>なごり</rt></ruby>`,'remnants, aftereffects'],
+      [`<ruby>大気<rt>たいき</rt></ruby>が<ruby>不安定<rt>ふあんてい</rt></ruby>`,'unstable atmosphere'],
+      [`<ruby>伴<rt>ともな</rt></ruby>う`,'to be accompanied by'],
+      [`<ruby>地盤<rt>じばん</rt></ruby>が<ruby>緩<rt>ゆる</rt></ruby>む`,'ground becoming loose/unstable'],
+      [`<ruby>土砂災害<rt>どしゃさいがい</rt></ruby>`,'landslide disaster'],
+      [`<ruby>増水<rt>ぞうすい</rt></ruby>`,'river swelling, rising water']
     ],
     reaction:[
-      `<ruby>今年<rt>ことし</rt></ruby><ruby>初<rt>はじ</rt></ruby>めての<ruby>熱中症警戒<rt>ねっちゅうしょうけいかい</rt></ruby>アラートと<ruby>聞<rt>き</rt></ruby>いて、もう<ruby>本格的<rt>ほんかくてき</rt></ruby>な<ruby>夏<rt>なつ</rt></ruby>だなと<ruby>感<rt>かん</rt></ruby>じました。`,
-      `<ruby>私<rt>わたし</rt></ruby>も<ruby>外<rt>そと</rt></ruby>に<ruby>出<rt>で</rt></ruby>るときは、<ruby>水分補給<rt>すいぶんほきゅう</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れないようにしたいです。`,
-      `<ruby>北日本<rt>きたにほん</rt></ruby>の<ruby>大雨<rt>おおあめ</rt></ruby>も<ruby>心配<rt>しんぱい</rt></ruby>なので、<ruby>早<rt>はや</rt></ruby>めに<ruby>備<rt>そな</rt></ruby>えてほしいです。`
+      `<ruby>台風<rt>たいふう</rt></ruby>じゃなくなっても、まだ<ruby>油断<rt>ゆだん</rt></ruby>できないんですね。`,
+      `<ruby>土砂災害<rt>どしゃさいがい</rt></ruby>の<ruby>危険<rt>きけん</rt></ruby>があると<ruby>聞<rt>き</rt></ruby>くと、やっぱり<ruby>心配<rt>しんぱい</rt></ruby>になります。`,
+      `<ruby>北日本<rt>きたにほん</rt></ruby>の<ruby>皆<rt>みな</rt></ruby>さんには、どうか<ruby>無理<rt>むり</rt></ruby>せず<ruby>安全<rt>あんぜん</rt></ruby>に<ruby>過<rt>す</rt></ruby>ごしてほしいです。`
     ],
     audio:{ narration:['audio/02-narration-1.mp3','audio/02-narration-2.mp3','audio/02-narration-3.mp3','audio/02-narration-4.mp3','audio/02-narration-5.mp3'], reaction:['audio/02-reaction-1.mp3','audio/02-reaction-2.mp3','audio/02-reaction-3.mp3'] }
   },
   {
-    num:'03', time:'03:15–06:00', dur:'2:45',
-    jp:'ニュース② 村上宗隆、MLBオールスター初出場　初打席は160キロ超えの剛速球に空振り三振', en:'Munetaka Murakami Makes MLB All-Star Debut, Strikes Out in First At-Bat', icon:'baseball',
+    num:'03', time:'03:15–05:45', dur:'2:30',
+    jp:'ニュース② バレー男子日本代表、イタリアを破り決勝ラウンド進出', en:"Japan Men's Volleyball Beats Italy, Advances to Final Round", icon:'baseball',
+    source:'https://newsdig.tbs.co.jp/articles/-/2804733',
     narration:[
-      `MLBのオールスターゲームがアメリカのフィラデルフィアで<ruby>行<rt>おこな</rt></ruby>われて、ホワイトソックスの<ruby>村上宗隆<rt>むらかみむねたか</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>が<ruby>出場<rt>しゅつじょう</rt></ruby>しました。`,
-      `<ruby>村上<rt>むらかみ</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>は7<ruby>回<rt>かい</rt></ruby>から<ruby>一塁<rt>いちるい</rt></ruby>の<ruby>守備<rt>しゅび</rt></ruby>につき、9<ruby>回<rt>かい</rt></ruby>に<ruby>念願<rt>ねんがん</rt></ruby>のオールスター<ruby>初打席<rt>はつだせき</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えました。`,
-      `<ruby>相手<rt>あいて</rt></ruby>はパドレスの<ruby>剛腕<rt>ごうわん</rt></ruby>ピッチャーで、160キロを<ruby>超<rt>こ</rt></ruby>える<ruby>速球<rt>そっきゅう</rt></ruby>と<ruby>対戦<rt>たいせん</rt></ruby>しましたが、<ruby>最後<rt>さいご</rt></ruby>は<ruby>空振<rt>からぶ</rt></ruby>り<ruby>三振<rt>さんしん</rt></ruby>に<ruby>倒<rt>たお</rt></ruby>れてしまいました。`,
-      `それでも、<ruby>堂々<rt>どうどう</rt></ruby>としたスイングで<ruby>球場<rt>きゅうじょう</rt></ruby>を<ruby>沸<rt>わ</rt></ruby>かせたそうです。`,
-      `<ruby>試合前<rt>しあいまえ</rt></ruby>には、バスケットボールのスター<ruby>選手<rt>せんしゅ</rt></ruby>ケビン・デュラントさんと<ruby>対面<rt>たいめん</rt></ruby>して、<ruby>笑顔<rt>えがお</rt></ruby>で<ruby>握手<rt>あくしゅ</rt></ruby>する<ruby>場面<rt>ばめん</rt></ruby>もありました。`
+      `バレーボール<ruby>男子<rt>だんし</rt></ruby><ruby>日本代表<rt>にほんだいひょう</rt></ruby>が、ネーションズリーグでイタリアと<ruby>対戦<rt>たいせん</rt></ruby>しました。`,
+      `イタリアって<ruby>実<rt>じつ</rt></ruby>はバレーの<ruby>世界選手権<rt>せかいせんしゅけん</rt></ruby>を<ruby>連覇<rt>れんぱ</rt></ruby>している、めちゃくちゃ<ruby>強<rt>つよ</rt></ruby>いチームなんです。`,
+      `<ruby>試合<rt>しあい</rt></ruby>はフルセットまでもつれる<ruby>大接戦<rt>だいせっせん</rt></ruby>になったんですが、<ruby>日本<rt>にほん</rt></ruby>が3<ruby>対<rt>たい</rt></ruby>2で<ruby>競<rt>せ</rt></ruby>り<ruby>勝<rt>か</rt></ruby>ちました。`,
+      `これで<ruby>開幕<rt>かいまく</rt></ruby>から9<ruby>連勝<rt>れんしょう</rt></ruby>、しかもまだ3<ruby>試合<rt>しあい</rt></ruby><ruby>残<rt>のこ</rt></ruby>っているのに<ruby>決勝<rt>けっしょう</rt></ruby>ラウンド<ruby>進出<rt>しんしゅつ</rt></ruby>を<ruby>決<rt>き</rt></ruby>めちゃいました。`,
+      `<ruby>石川<rt>いしかわ</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>や<ruby>髙橋<rt>たかはし</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>たちが、<ruby>最後<rt>さいご</rt></ruby>まで<ruby>声援<rt>せいえん</rt></ruby>に<ruby>応<rt>こた</rt></ruby>えて<ruby>粘<rt>ねば</rt></ruby>り<ruby>強<rt>づよ</rt></ruby>く<ruby>戦<rt>たたか</rt></ruby>ったのが<ruby>印象的<rt>いんしょうてき</rt></ruby>でした。`
     ],
     vocab:[
-      [`オールスターゲーム`,'all-star game'],
-      [`<ruby>出場<rt>しゅつじょう</rt></ruby>する`,'to appear in a game'],
-      [`<ruby>守備<rt>しゅび</rt></ruby>につく`,'to take a defensive position'],
-      [`<ruby>剛腕<rt>ごうわん</rt></ruby>`,'strong-armed (pitcher)'],
-      [`<ruby>速球<rt>そっきゅう</rt></ruby>`,'fastball'],
-      [`<ruby>空振<rt>からぶ</rt></ruby>り<ruby>三振<rt>さんしん</rt></ruby>`,'swinging strikeout'],
-      [`<ruby>沸<rt>わ</rt></ruby>かせる`,'to excite (a crowd)']
+      [`<ruby>対戦<rt>たいせん</rt></ruby>する`,'to compete against'],
+      [`<ruby>連覇<rt>れんぱ</rt></ruby>する`,'to win consecutive titles'],
+      [`<ruby>大接戦<rt>だいせっせん</rt></ruby>`,'extremely close match'],
+      [`<ruby>競<rt>せ</rt></ruby>り<ruby>勝<rt>か</rt></ruby>つ`,'to win by a narrow margin'],
+      [`<ruby>開幕<rt>かいまく</rt></ruby>`,'tournament opening'],
+      [`<ruby>連勝<rt>れんしょう</rt></ruby>`,'winning streak'],
+      [`<ruby>声援<rt>せいえん</rt></ruby>に<ruby>応<rt>こた</rt></ruby>える`,'to respond to cheers/support']
     ],
     reaction:[
-      `<ruby>初打席<rt>はつだせき</rt></ruby>で<ruby>三振<rt>さんしん</rt></ruby>してしまったのは<ruby>残念<rt>ざんねん</rt></ruby>ですが、<ruby>堂々<rt>どうどう</rt></ruby>と<ruby>挑戦<rt>ちょうせん</rt></ruby>する<ruby>姿<rt>すがた</rt></ruby>はかっこよかったです。`,
-      `160キロを<ruby>超<rt>こ</rt></ruby>える<ruby>球<rt>たま</rt></ruby>と<ruby>戦<rt>たたか</rt></ruby>うなんて、<ruby>想像<rt>そうぞう</rt></ruby>するだけで<ruby>緊張<rt>きんちょう</rt></ruby>します。`,
-      `<ruby>次<rt>つぎ</rt></ruby>はヒットを<ruby>打<rt>う</rt></ruby>つ<ruby>村上<rt>むらかみ</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>が<ruby>見<rt>み</rt></ruby>たいです。`
+      `フルセットの<ruby>大接戦<rt>だいせっせん</rt></ruby>だったと<ruby>聞<rt>き</rt></ruby>いて、ドキドキしながら<ruby>読<rt>よ</rt></ruby>みました。`,
+      `9<ruby>連勝<rt>れんしょう</rt></ruby>なんて、<ruby>本当<rt>ほんとう</rt></ruby>にすごいと<ruby>思<rt>おも</rt></ruby>います。`,
+      `このまま<ruby>決勝<rt>けっしょう</rt></ruby>ラウンドでも<ruby>勝<rt>か</rt></ruby>ち<ruby>続<rt>つづ</rt></ruby>けてほしいです。`
     ],
     audio:{ narration:['audio/03-narration-1.mp3','audio/03-narration-2.mp3','audio/03-narration-3.mp3','audio/03-narration-4.mp3','audio/03-narration-5.mp3'], reaction:['audio/03-reaction-1.mp3','audio/03-reaction-2.mp3','audio/03-reaction-3.mp3'] }
   },
   {
-    num:'04', time:'06:00–08:30', dur:'2:30',
-    jp:'ニュース③ 菅田将暉、人生初のチェーンソーでアイスカービングに挑戦', en:'Masaki Suda Tries Chainsaw Ice Carving for the First Time', icon:'torii',
+    num:'04', time:'05:45–08:00', dur:'2:15',
+    jp:'ニュース③ 元「嵐」櫻井翔さん・相葉雅紀さんが新ファンクラブ設立', en:'Ex-Arashi Members Sakurai Sho and Aiba Masaki Launch New Fan Clubs', icon:'torii',
+    source:'https://newsdig.tbs.co.jp/articles/-/2805400',
     narration:[
-      `<ruby>俳優<rt>はいゆう</rt></ruby>の<ruby>菅田将暉<rt>すだまさき</rt></ruby>さんが、<ruby>渋谷<rt>しぶや</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われたイベントに<ruby>登場<rt>とうじょう</rt></ruby>しました。`,
-      `このイベントは、<ruby>夏<rt>なつ</rt></ruby>の<ruby>暑<rt>あつ</rt></ruby>さ<ruby>対策<rt>たいさく</rt></ruby>として<ruby>炭酸水<rt>たんさんすい</rt></ruby>をPRするもので、<ruby>菅田<rt>すだ</rt></ruby>さんはCMのように<ruby>炭酸水<rt>たんさんすい</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んで「<ruby>気分爽快<rt>きぶんそうかい</rt></ruby>です」と<ruby>話<rt>はな</rt></ruby>していました。`,
-      `<ruby>会場<rt>かいじょう</rt></ruby>では<ruby>大<rt>おお</rt></ruby>きな<ruby>氷<rt>こおり</rt></ruby>の<ruby>像<rt>ぞう</rt></ruby>が<ruby>用意<rt>ようい</rt></ruby>されていて、<ruby>菅田<rt>すだ</rt></ruby>さんは<ruby>人生<rt>じんせい</rt></ruby>で<ruby>初<rt>はじ</rt></ruby>めてチェーンソーを<ruby>使<rt>つか</rt></ruby>ってアイスカービングに<ruby>挑戦<rt>ちょうせん</rt></ruby>しました。`,
-      `「B<ruby>級<rt>きゅう</rt></ruby>ホラーみたい」と<ruby>言<rt>い</rt></ruby>いながら<ruby>楽<rt>たの</rt></ruby>しそうにポーズを<ruby>決<rt>き</rt></ruby>めていましたが、<ruby>彫刻<rt>ちょうこく</rt></ruby>が<ruby>終<rt>お</rt></ruby>わるとすぐに<ruby>電源<rt>でんげん</rt></ruby>を<ruby>切<rt>き</rt></ruby>られてしまい、<ruby>少<rt>すこ</rt></ruby>し<ruby>残念<rt>ざんねん</rt></ruby>そうな<ruby>顔<rt>かお</rt></ruby>を<ruby>見<rt>み</rt></ruby>せていました。`
+      `<ruby>元<rt>もと</rt></ruby>「<ruby>嵐<rt>あらし</rt></ruby>」の<ruby>櫻井翔<rt>さくらいしょう</rt></ruby>さんと<ruby>相葉雅紀<rt>あいばまさき</rt></ruby>さんが、それぞれ<ruby>新<rt>あたら</rt></ruby>しいファンクラブを<ruby>始<rt>はじ</rt></ruby>めました。`,
+      `<ruby>二人<rt>ふたり</rt></ruby>とも<ruby>同<rt>おな</rt></ruby>じ15<ruby>日<rt>にち</rt></ruby>に<ruby>受付<rt>うけつけ</rt></ruby>をスタートさせたんですが、<ruby>前<rt>まえ</rt></ruby>の<ruby>嵐<rt>あらし</rt></ruby>ファンクラブの<ruby>会員<rt>かいいん</rt></ruby>だった<ruby>人<rt>ひと</rt></ruby>は、<ruby>登録情報<rt>とうろくじょうほう</rt></ruby>をそのまま<ruby>引<rt>ひ</rt></ruby>き<ruby>継<rt>つ</rt></ruby>げるみたいです。`,
+      `<ruby>櫻井<rt>さくらい</rt></ruby>さんのファンクラブは「THE SHOW」という<ruby>名前<rt>なまえ</rt></ruby>で、Sを<ruby>二<rt>ふた</rt></ruby>つ<ruby>重<rt>かさ</rt></ruby>ねたロゴがちょっとおしゃれです。`,
+      `<ruby>早期<rt>そうき</rt></ruby><ruby>入会<rt>にゅうかい</rt></ruby>だと、<ruby>櫻井<rt>さくらい</rt></ruby>さんはラゲッジタグ、<ruby>相葉<rt>あいば</rt></ruby>さんは<ruby>自分<rt>じぶん</rt></ruby>のイラスト<ruby>入<rt>い</rt></ruby>りのメガネ<ruby>拭<rt>ふ</rt></ruby>きと<ruby>缶<rt>かん</rt></ruby>バッジがもらえるそうです。`,
+      `お<ruby>二人<rt>ふたり</rt></ruby>とも、ファンと<ruby>楽<rt>たの</rt></ruby>しい<ruby>時間<rt>じかん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っていきたいって<ruby>話<rt>はな</rt></ruby>していました。`
     ],
     vocab:[
-      [`<ruby>登場<rt>とうじょう</rt></ruby>する`,'to appear, show up'],
-      [`<ruby>炭酸水<rt>たんさんすい</rt></ruby>`,'carbonated water'],
-      [`<ruby>気分爽快<rt>きぶんそうかい</rt></ruby>`,'refreshed, invigorated feeling'],
-      [`<ruby>氷<rt>こおり</rt></ruby>の<ruby>像<rt>ぞう</rt></ruby>`,'ice sculpture'],
-      [`<ruby>挑戦<rt>ちょうせん</rt></ruby>する`,'to try, take on a challenge'],
-      [`<ruby>彫刻<rt>ちょうこく</rt></ruby>`,'carving, sculpture']
+      [`<ruby>会員<rt>かいいん</rt></ruby>`,'member'],
+      [`<ruby>引<rt>ひ</rt></ruby>き<ruby>継<rt>つ</rt></ruby>ぐ`,'to carry over, inherit'],
+      [`<ruby>早期<rt>そうき</rt></ruby><ruby>入会<rt>にゅうかい</rt></ruby>`,'early registration'],
+      [`<ruby>登録情報<rt>とうろくじょうほう</rt></ruby>`,'registration information'],
+      [`<ruby>重<rt>かさ</rt></ruby>ねる`,'to layer, overlap'],
+      [`<ruby>缶<rt>かん</rt></ruby>バッジ`,'button badge']
     ],
     reaction:[
-      `チェーンソーでアイスカービングをする<ruby>菅田<rt>すだ</rt></ruby>さんの<ruby>姿<rt>すがた</rt></ruby>、<ruby>想像<rt>そうぞう</rt></ruby>しただけで<ruby>楽<rt>たの</rt></ruby>しそうです。`,
-      `<ruby>電源<rt>でんげん</rt></ruby>を<ruby>切<rt>き</rt></ruby>られて<ruby>残念<rt>ざんねん</rt></ruby>そうにしている<ruby>顔<rt>かお</rt></ruby>が、なんだかかわいいなと<ruby>思<rt>おも</rt></ruby>いました。`,
-      `<ruby>私<rt>わたし</rt></ruby>も<ruby>夏<rt>なつ</rt></ruby>はさっぱりした<ruby>炭酸水<rt>たんさんすい</rt></ruby>が<ruby>飲<rt>の</rt></ruby>みたくなります。`
+      `「<ruby>嵐<rt>あらし</rt></ruby>」ファンとしては、こういう<ruby>形<rt>かたち</rt></ruby>でつながれるのはうれしいだろうなと<ruby>思<rt>おも</rt></ruby>いました。`,
+      `ロゴのデザインも<ruby>特典<rt>とくてん</rt></ruby>も、それぞれの<ruby>個性<rt>こせい</rt></ruby>が<ruby>出<rt>で</rt></ruby>ていて<ruby>面白<rt>おもしろ</rt></ruby>いです。`,
+      `お<ruby>二人<rt>ふたり</rt></ruby>のこれからの<ruby>活動<rt>かつどう</rt></ruby>も<ruby>楽<rt>たの</rt></ruby>しみです。`
     ],
-    audio:{ narration:['audio/04-narration-1.mp3','audio/04-narration-2.mp3','audio/04-narration-3.mp3','audio/04-narration-4.mp3'], reaction:['audio/04-reaction-1.mp3','audio/04-reaction-2.mp3','audio/04-reaction-3.mp3'] }
+    audio:{ narration:['audio/04-narration-1.mp3','audio/04-narration-2.mp3','audio/04-narration-3.mp3','audio/04-narration-4.mp3','audio/04-narration-5.mp3'], reaction:['audio/04-reaction-1.mp3','audio/04-reaction-2.mp3','audio/04-reaction-3.mp3'] }
   },
   {
-    num:'05', time:'08:30–09:30', dur:'1:00',
+    num:'05', time:'08:00–10:15', dur:'2:15',
+    jp:'ニュース④ 山梨・身延町で地域特産クラフトビールが完成', en:'Minobu Town Completes Local Specialty Craft Beer', icon:'wallet',
+    source:'https://newsdig.tbs.co.jp/articles/-/2803511',
+    narration:[
+      `<ruby>山梨県<rt>やまなしけん</rt></ruby>の<ruby>身延町<rt>みのぶちょう</rt></ruby>で、<ruby>地元<rt>じもと</rt></ruby>の<ruby>特産品<rt>とくさんひん</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ったクラフトビールが<ruby>完成<rt>かんせい</rt></ruby>しました。`,
+      `<ruby>作<rt>つく</rt></ruby>ったのは、ビール<ruby>造<rt>づく</rt></ruby>りが<ruby>未経験<rt>みけいけん</rt></ruby>だった<ruby>地元<rt>じもと</rt></ruby>の7<ruby>人<rt>にん</rt></ruby>だそうです。`,
+      `<ruby>町<rt>まち</rt></ruby>の<ruby>新<rt>あたら</rt></ruby>しい<ruby>特産品<rt>とくさんひん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>りたいという<ruby>思<rt>おも</rt></ruby>いから、<ruby>開発<rt>かいはつ</rt></ruby>に<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>んできました。`,
+      `お<ruby>披露目会<rt>ひろめかい</rt></ruby>では「カンパーイ」の<ruby>声<rt>こえ</rt></ruby>とともに、みんなで<ruby>完成<rt>かんせい</rt></ruby>を<ruby>喜<rt>よろこ</rt></ruby>んでいました。`,
+      `<ruby>地元<rt>じもと</rt></ruby>の<ruby>材料<rt>ざいりょう</rt></ruby>を<ruby>活<rt>い</rt></ruby>かしたものづくりって、なんだかあたたかい<ruby>気持<rt>きも</rt></ruby>ちになりますね。`
+    ],
+    vocab:[
+      [`<ruby>特産品<rt>とくさんひん</rt></ruby>`,'local specialty product'],
+      [`<ruby>完成<rt>かんせい</rt></ruby>する`,'to be completed'],
+      [`<ruby>未経験<rt>みけいけん</rt></ruby>`,'inexperienced, no prior experience'],
+      [`<ruby>開発<rt>かいはつ</rt></ruby>に<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>む`,'to work on development'],
+      [`<ruby>披露目会<rt>ひろめかい</rt></ruby>`,'unveiling event'],
+      [`<ruby>活<rt>い</rt></ruby>かす`,'to make good use of']
+    ],
+    reaction:[
+      `<ruby>未経験<rt>みけいけん</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>めてビールを<ruby>完成<rt>かんせい</rt></ruby>させたなんて、すごい<ruby>努力<rt>どりょく</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>います。`,
+      `わたしも<ruby>地元<rt>じもと</rt></ruby>の<ruby>特産品<rt>とくさんひん</rt></ruby>を<ruby>使<rt>つか</rt></ruby>った<ruby>商品<rt>しょうひん</rt></ruby>、いつか<ruby>飲<rt>の</rt></ruby>んでみたいです。`,
+      `こういう<ruby>地域<rt>ちいき</rt></ruby>の<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>み、もっと<ruby>広<rt>ひろ</rt></ruby>がってほしいですね。`
+    ],
+    audio:{ narration:['audio/05-narration-1.mp3','audio/05-narration-2.mp3','audio/05-narration-3.mp3','audio/05-narration-4.mp3','audio/05-narration-5.mp3'], reaction:['audio/05-reaction-1.mp3','audio/05-reaction-2.mp3','audio/05-reaction-3.mp3'] }
+  },
+  {
+    num:'06', time:'10:15–11:15', dur:'1:00',
     jp:'まとめ＆フリートーク', en:'Recap & Free Talk', icon:'wrap',
     narration:[
-      `<ruby>今日<rt>きょう</rt></ruby>は<ruby>三<rt>みっ</rt></ruby>つのニュースを<ruby>紹介<rt>しょうかい</rt></ruby>しました。`,
-      `<ruby>関東<rt>かんとう</rt></ruby>で<ruby>今年<rt>ことし</rt></ruby><ruby>初<rt>はじ</rt></ruby>めての<ruby>熱中症警戒<rt>ねっちゅうしょうけいかい</rt></ruby>アラートが<ruby>出<rt>で</rt></ruby>たニュース、MLBオールスターで<ruby>村上宗隆<rt>むらかみむねたか</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>が<ruby>初打席<rt>はつだせき</rt></ruby>に<ruby>挑<rt>いど</rt></ruby>んだニュース、そして<ruby>菅田将暉<rt>すだまさき</rt></ruby>さんがチェーンソーでアイスカービングに<ruby>挑戦<rt>ちょうせん</rt></ruby>したニュースです。`
+      `<ruby>今日<rt>きょう</rt></ruby>は<ruby>四<rt>よっ</rt></ruby>つのニュースを<ruby>紹介<rt>しょうかい</rt></ruby>しました。`,
+      `<ruby>台風<rt>たいふう</rt></ruby>から<ruby>変<rt>か</rt></ruby>わった<ruby>低気圧<rt>ていきあつ</rt></ruby>による<ruby>大雨<rt>おおあめ</rt></ruby>と<ruby>土砂災害<rt>どしゃさいがい</rt></ruby><ruby>警戒<rt>けいかい</rt></ruby>、バレーボール<ruby>男子<rt>だんし</rt></ruby><ruby>日本代表<rt>にほんだいひょう</rt></ruby>のイタリア<ruby>戦<rt>せん</rt></ruby><ruby>勝利<rt>しょうり</rt></ruby>と<ruby>決勝<rt>けっしょう</rt></ruby>ラウンド<ruby>進出<rt>しんしゅつ</rt></ruby>、<ruby>櫻井翔<rt>さくらいしょう</rt></ruby>さんと<ruby>相葉雅紀<rt>あいばまさき</rt></ruby>さんの<ruby>新<rt>あたら</rt></ruby>しいファンクラブ、そして<ruby>山梨県<rt>やまなしけん</rt></ruby><ruby>身延町<rt>みのぶちょう</rt></ruby>のクラフトビール<ruby>完成<rt>かんせい</rt></ruby>のニュースです。`
     ],
     vocab:null,
     phrases:[
@@ -553,13 +595,13 @@ const segments = [
       [`それを<ruby>聞<rt>き</rt></ruby>いて〜`,'Hearing that, ~']
     ],
     reaction:[
-      `<ruby>今日<rt>きょう</rt></ruby>のニュースの<ruby>中<rt>なか</rt></ruby>で、<ruby>一番<rt>いちばん</rt></ruby><ruby>印象的<rt>いんしょうてき</rt></ruby>だったのは、<ruby>村上<rt>むらかみ</rt></ruby><ruby>選手<rt>せんしゅ</rt></ruby>の<ruby>初打席<rt>はつだせき</rt></ruby>です。`,
-      `<ruby>理由<rt>りゆう</rt></ruby>は、160キロを<ruby>超<rt>こ</rt></ruby>える<ruby>速球<rt>そっきゅう</rt></ruby>に<ruby>堂々<rt>どうどう</rt></ruby>と<ruby>挑<rt>いど</rt></ruby>む<ruby>姿<rt>すがた</rt></ruby>に<ruby>勇気<rt>ゆうき</rt></ruby>をもらったからです。`
+      `<ruby>今日<rt>きょう</rt></ruby>のニュースの<ruby>中<rt>なか</rt></ruby>で、<ruby>一番<rt>いちばん</rt></ruby><ruby>印象的<rt>いんしょうてき</rt></ruby>だったのは、バレーボール<ruby>日本代表<rt>にほんだいひょう</rt></ruby>のイタリア<ruby>戦<rt>せん</rt></ruby>です。`,
+      `<ruby>理由<rt>りゆう</rt></ruby>は、フルセットの<ruby>大接戦<rt>だいせっせん</rt></ruby>を<ruby>勝<rt>か</rt></ruby>ち<ruby>切<rt>き</rt></ruby>ったところに<ruby>感動<rt>かんどう</rt></ruby>したからです。`
     ],
-    audio:{ narration:['audio/05-narration-1.mp3','audio/05-narration-2.mp3'], reaction:['audio/05-reaction-1.mp3','audio/05-reaction-2.mp3'] }
+    audio:{ narration:['audio/06-narration-1.mp3','audio/06-narration-2.mp3'], reaction:['audio/06-reaction-1.mp3','audio/06-reaction-2.mp3'] }
   },
   {
-    num:'06', time:'09:30–10:00', dur:'0:30',
+    num:'07', time:'11:15–11:45', dur:'0:30',
     jp:'クロージング', en:'Closing', icon:'flag',
     narration:[
       `<ruby>今日<rt>きょう</rt></ruby>のニュース<ruby>練習<rt>れんしゅう</rt></ruby>はここまでです。`,
@@ -571,7 +613,7 @@ const segments = [
     reaction:[
       `<ruby>今日<rt>きょう</rt></ruby>も<ruby>頑張<rt>がんば</rt></ruby>りました。<ruby>明日<rt>あした</rt></ruby>も<ruby>頑張<rt>がんば</rt></ruby>ります。`
     ],
-    audio:{ narration:['audio/06-narration-1.mp3','audio/06-narration-2.mp3','audio/06-narration-3.mp3','audio/06-narration-4.mp3'], reaction:['audio/06-reaction-1.mp3'] }
+    audio:{ narration:['audio/07-narration-1.mp3','audio/07-narration-2.mp3','audio/07-narration-3.mp3','audio/07-narration-4.mp3'], reaction:['audio/07-reaction-1.mp3'] }
   }
 ];
 
@@ -660,7 +702,7 @@ function renderRundown(){
       </div>
     </div>
   `).join('');
-  rundownEl.innerHTML = `<div class="rundown-head">Rundown &middot; 全6セグメント</div>${items}`;
+  rundownEl.innerHTML = `<div class="rundown-head">Rundown &middot; 全${segments.length}セグメント</div>${items}`;
   rundownEl.querySelectorAll('.rd-item').forEach(el=>{
     el.addEventListener('click', ()=>{ stopAllAudio(); current = parseInt(el.dataset.i); renderStage(); renderRundown(); });
   });
@@ -701,6 +743,7 @@ function renderStage(){
       <div>
         <h2>${s.num}｜${s.jp}</h2>
         <div class="en-sub">${s.en}</div>
+        ${s.source ? `<a class="source-link" href="${s.source}" target="_blank" rel="noopener noreferrer">📰 Source: TBS NEWS DIG ↗</a>` : ''}
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
         <div class="time-chip mono">${s.time}</div>
@@ -716,7 +759,7 @@ function renderStage(){
     ${reactionHtml}
     <div class="stage-nav">
       <button id="prevBtn" ${current===0?'disabled':''}>← Prev</button>
-      <div class="count mono">${s.num} / 06</div>
+      <div class="count mono">${s.num} / ${String(segments.length).padStart(2,'0')}</div>
       <button id="nextBtn" ${current===segments.length-1?'disabled':''}>Next →</button>
     </div>
   `;
