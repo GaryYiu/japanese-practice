@@ -42,6 +42,9 @@
   }
   ruby:hover{background:rgba(43,69,96,0.12);}
   ruby.word-playing{background:rgba(189,58,30,0.18);}
+  .word{cursor:pointer;border-radius:3px;transition:background .12s ease;}
+  .word:hover{background:rgba(43,69,96,0.12);}
+  .word.word-playing{background:rgba(189,58,30,0.18);}
   rt{
     font-size:0.48em;
     color:var(--shu);
@@ -967,12 +970,29 @@ function resolveSpokenRange(text, rubies, start, end){
   return [start, cur];
 }
 
-function speakWord(rubyEl){
-  let word = stripRuby(rubyEl.innerHTML); // exact legacy behavior — the safety net
+function playUtteranceFor(el, word){
+  if(!word || !('speechSynthesis' in window)) return;
+  stopAllAudio();
+  document.querySelectorAll('.word-playing').forEach(x=>x.classList.remove('word-playing'));
+  const u = makeUtterance(word);
+  u.onend = ()=>el.classList.remove('word-playing');
+  u.onerror = ()=>el.classList.remove('word-playing');
+  el.classList.add('word-playing');
+  window.speechSynthesis.speak(u);
+}
+
+function speakWord(el){
+  // Plain kana words (see wrapKanaWords below) carry their full spoken text as
+  // their own textContent already — no ruby/rt to expand around.
+  if(el.classList.contains('word')){
+    playUtteranceFor(el, el.textContent.trim());
+    return;
+  }
+  let word = stripRuby(el.innerHTML); // exact legacy behavior — the safety net
   try{
-    const container = rubyEl.closest('p, li, td');
+    const container = el.closest('p, li, td');
     if(container){
-      const group = gluedRubyGroup(rubyEl);
+      const group = gluedRubyGroup(el);
       const { text, rubies } = buildOffsetMap(container);
       const startInfo = rubies.find(r=>r.el === group[0]);
       const endInfo = rubies.find(r=>r.el === group[group.length-1]);
@@ -987,24 +1007,89 @@ function speakWord(rubyEl){
     // plain ruby-only fallback already computed above. This can never break click-to-speak.
     console.warn('word-span detection failed, falling back to ruby text', err);
   }
-  if(!word || !('speechSynthesis' in window)) return;
-  stopAllAudio();
-  document.querySelectorAll('.word-playing').forEach(el=>el.classList.remove('word-playing'));
-  const u = makeUtterance(word);
-  u.onend = ()=>rubyEl.classList.remove('word-playing');
-  u.onerror = ()=>rubyEl.classList.remove('word-playing');
-  rubyEl.classList.add('word-playing');
-  window.speechSynthesis.speak(u);
+  playUtteranceFor(el, word);
+}
+
+// Wraps standalone kana words that have NO kanji/ruby anchor at all (e.g. あるそうです,
+// かもしれません) in a clickable <span class="word">, so they get the same
+// click-to-pronounce behavior as ruby-anchored words — otherwise there's no DOM
+// element for a learner to click on a pure-kana word in the first place. Ruby-anchored
+// words keep using speakWord's existing on-click expansion above, untouched; this only
+// adds NEW click targets for chunks that don't overlap any existing <ruby>.
+function wrapKanaWords(containerEl){
+  const segmenter = getSegmenter();
+  if(!segmenter) return;
+  try{
+    const { text, rubies } = buildOffsetMap(containerEl);
+    const tokens = segmenter.segment(text);
+    let pos = 0;
+    const tokOffsets = tokens.map(t=>{ const o={text:t,start:pos,end:pos+t.length}; pos+=t.length; return o; });
+    const overlapsRuby = (s,e)=>rubies.some(r=>r.start < e && r.end > s);
+
+    const newRanges = [];
+    let i = 0;
+    while(i < tokOffsets.length){
+      const t = tokOffsets[i];
+      if(isHiraganaOnly(t.text) && !PARTICLE_STOP_WORDS.has(t.text) && !overlapsRuby(t.start, t.end)){
+        let j = i, end = t.end;
+        while(j + 1 < tokOffsets.length){
+          const nxt = tokOffsets[j + 1];
+          if(nxt.start !== end) break;
+          if(!isHiraganaOnly(nxt.text) || PARTICLE_STOP_WORDS.has(nxt.text)) break;
+          if(overlapsRuby(nxt.start, nxt.end)) break; // stop before touching a ruby-anchored word
+          end = nxt.end; j++;
+        }
+        newRanges.push([t.start, end]);
+        i = j + 1;
+      } else {
+        i++;
+      }
+    }
+    // Wrap in reverse order so earlier offsets stay valid as we mutate the DOM.
+    newRanges.reverse().forEach(([s,e])=>wrapTextRange(containerEl, s, e));
+  }catch(err){
+    console.warn('kana-word wrapping failed, leaving plain text unclickable', err);
+  }
+}
+
+function wrapTextRange(containerEl, start, end){
+  let pos = 0;
+  function walk(node){
+    for(const child of Array.from(node.childNodes)){
+      if(child.nodeType === Node.TEXT_NODE){
+        const nodeStart = pos, nodeEnd = pos + child.textContent.length;
+        if(start >= nodeStart && end <= nodeEnd){
+          const range = document.createRange();
+          range.setStart(child, start - nodeStart);
+          range.setEnd(child, end - nodeStart);
+          const span = document.createElement('span');
+          span.className = 'word';
+          try{ range.surroundContents(span); }catch(e){ /* leave text unwrapped, non-fatal */ }
+          return true;
+        }
+        pos = nodeEnd;
+      } else if(child.nodeType === Node.ELEMENT_NODE && child.tagName === 'RUBY'){
+        let base = '';
+        child.childNodes.forEach(c=>{ if(c.nodeType === Node.TEXT_NODE) base += c.textContent; });
+        pos += base.length;
+      } else if(child.nodeType === Node.ELEMENT_NODE){
+        if(walk(child)) return true;
+      }
+    }
+    return false;
+  }
+  walk(containerEl);
 }
 
 const rundownEl = document.getElementById('rundown');
 const stageEl = document.getElementById('stage');
 const progressFill = document.getElementById('progressFill');
-// Delegated once: clicking any ruby-wrapped word inside the stage (narration,
-// reaction, vocab table, phrase table) speaks just that word.
+// Delegated once: clicking any ruby-wrapped word or wrapped kana word (see
+// wrapKanaWords) inside the stage (narration, reaction, vocab table, phrase
+// table) speaks just that word.
 stageEl.addEventListener('click', (e)=>{
-  const rubyEl = e.target.closest('ruby');
-  if(rubyEl) speakWord(rubyEl);
+  const el = e.target.closest('ruby, .word');
+  if(el) speakWord(el);
 });
 
 function renderRundown(){
@@ -1094,6 +1179,7 @@ function renderStage(){
   const audioNarration = (s.audio && s.audio.narration) || [];
   const audioReaction = (s.audio && s.audio.reaction) || [];
   stageEl.querySelectorAll('.narration-text p').forEach((el,i)=>{
+    wrapKanaWords(el); // must run before stripRuby/button insertion below (see wrapKanaWords)
     const text = stripRuby(el.innerHTML);
     const audioSrc = audioNarration[i];
     speakItems.push({text, audioSrc});
@@ -1101,12 +1187,16 @@ function renderStage(){
     el.querySelector('.speak-btn').addEventListener('click', ()=>{ stopAllAudio(); playItem(text, audioSrc); });
   });
   stageEl.querySelectorAll('.reaction-box li').forEach((el,i)=>{
+    wrapKanaWords(el);
     const text = stripRuby(el.innerHTML);
     const audioSrc = audioReaction[i];
     speakItems.push({text, audioSrc});
     el.insertAdjacentHTML('afterbegin', '<button class="speak-btn" type="button" aria-label="Play">🔊</button>');
     el.querySelector('.speak-btn').addEventListener('click', ()=>{ stopAllAudio(); playItem(text, audioSrc); });
   });
+  // Vocab/phrase table terms don't get a speak-btn, but their ruby words are already
+  // clickable via delegation — extend the same kana-word wrapping here for consistency.
+  stageEl.querySelectorAll('.vocab-table td.term, .phrase-table td:first-child').forEach(el=>wrapKanaWords(el));
   document.getElementById('playAllBtn').addEventListener('click', ()=>playSequence(speakItems));
 }
 
