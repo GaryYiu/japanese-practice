@@ -932,6 +932,11 @@ const PARTICLE_STOP_WORDS = new Set([
   'ので','のに','こそ','でも'
 ]);
 function isHiraganaOnly(s){ return /^[ぁ-んー]+$/.test(s); }
+// Broader than isHiraganaOnly: also accepts katakana, so standalone loanwords like
+// ニュース get their own clickable word too. Only used by wrapKanaWords (below), not
+// by resolveSpokenRange — a ruby's trailing okurigana should never absorb a following
+// unrelated katakana noun (e.g. 離れた + ニュース must stay two separate words).
+function isKanaOnly(s){ return /^[ぁ-んァ-ヴーｱ-ﾝﾞ]+$/.test(s); }
 
 let _segmenter = null;
 function getSegmenter(){
@@ -1021,22 +1026,39 @@ function wrapKanaWords(containerEl){
   if(!segmenter) return;
   try{
     const { text, rubies } = buildOffsetMap(containerEl);
+
+    // A ruby's OWN click-to-pronounce already speaks its trailing okurigana via
+    // resolveSpokenRange (e.g. 離 + れた). That expanded range must count as "claimed"
+    // here too — not just the ruby's own narrow [start,end) — otherwise the leftover
+    // continuation text (れた) looks like an unclaimed bare word and gets wrapped a
+    // second time as its own (wrong, fragment-only) clickable span.
+    const claimed = [];
+    const visited = new Set();
+    for(const r of rubies){
+      if(visited.has(r.el)) continue;
+      const group = gluedRubyGroup(r.el);
+      group.forEach(g=>visited.add(g));
+      const gStart = rubies.find(x=>x.el === group[0]).start;
+      const gEnd = rubies.find(x=>x.el === group[group.length - 1]).end;
+      claimed.push(resolveSpokenRange(text, rubies, gStart, gEnd));
+    }
+    const overlapsClaimed = (s,e)=>claimed.some(([cs,ce])=>cs < e && ce > s);
+
     const tokens = segmenter.segment(text);
     let pos = 0;
     const tokOffsets = tokens.map(t=>{ const o={text:t,start:pos,end:pos+t.length}; pos+=t.length; return o; });
-    const overlapsRuby = (s,e)=>rubies.some(r=>r.start < e && r.end > s);
 
     const newRanges = [];
     let i = 0;
     while(i < tokOffsets.length){
       const t = tokOffsets[i];
-      if(isHiraganaOnly(t.text) && !PARTICLE_STOP_WORDS.has(t.text) && !overlapsRuby(t.start, t.end)){
+      if(isKanaOnly(t.text) && !PARTICLE_STOP_WORDS.has(t.text) && !overlapsClaimed(t.start, t.end)){
         let j = i, end = t.end;
         while(j + 1 < tokOffsets.length){
           const nxt = tokOffsets[j + 1];
           if(nxt.start !== end) break;
-          if(!isHiraganaOnly(nxt.text) || PARTICLE_STOP_WORDS.has(nxt.text)) break;
-          if(overlapsRuby(nxt.start, nxt.end)) break; // stop before touching a ruby-anchored word
+          if(!isKanaOnly(nxt.text) || PARTICLE_STOP_WORDS.has(nxt.text)) break;
+          if(overlapsClaimed(nxt.start, nxt.end)) break; // stop before touching a ruby-anchored word
           end = nxt.end; j++;
         }
         newRanges.push([t.start, end]);
