@@ -34,7 +34,14 @@
   .mono{font-family:'IBM Plex Mono',monospace;}
   .mincho{font-family:'Shippori Mincho',serif;}
 
-  ruby{ruby-position:over;}
+  ruby{
+    ruby-position:over;
+    cursor:pointer;
+    border-radius:3px;
+    transition:background .12s ease;
+  }
+  ruby:hover{background:rgba(43,69,96,0.12);}
+  ruby.word-playing{background:rgba(189,58,30,0.18);}
   rt{
     font-size:0.48em;
     color:var(--shu);
@@ -689,10 +696,29 @@ function playSequence(items){
   }
   next();
 }
+// Click-to-pronounce for individual vocab words: speaks just the ruby-wrapped
+// word (kanji, no reading) via live browser TTS — never pre-rendered audio.
+function speakWord(rubyEl){
+  const word = stripRuby(rubyEl.innerHTML);
+  if(!word || !('speechSynthesis' in window)) return;
+  stopAllAudio();
+  document.querySelectorAll('.word-playing').forEach(el=>el.classList.remove('word-playing'));
+  const u = makeUtterance(word);
+  u.onend = ()=>rubyEl.classList.remove('word-playing');
+  u.onerror = ()=>rubyEl.classList.remove('word-playing');
+  rubyEl.classList.add('word-playing');
+  window.speechSynthesis.speak(u);
+}
 
 const rundownEl = document.getElementById('rundown');
 const stageEl = document.getElementById('stage');
 const progressFill = document.getElementById('progressFill');
+// Delegated once: clicking any ruby-wrapped word inside the stage (narration,
+// reaction, vocab table, phrase table) speaks just that word.
+stageEl.addEventListener('click', (e)=>{
+  const rubyEl = e.target.closest('ruby');
+  if(rubyEl) speakWord(rubyEl);
+});
 
 function renderRundown(){
   const items = segments.map((s,i)=>`
