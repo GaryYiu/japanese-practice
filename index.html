@@ -45,6 +45,26 @@
   .word{cursor:pointer;border-radius:3px;transition:background .12s ease;}
   .word:hover{background:rgba(43,69,96,0.12);}
   .word.word-playing{background:rgba(189,58,30,0.18);}
+  .word-tooltip{
+    position:fixed;
+    z-index:50;
+    max-width:240px;
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow:0 4px 14px rgba(34,31,26,0.18);
+    padding:8px 12px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    line-height:1.5;
+    pointer-events:none;
+    opacity:0;
+    transform:translateY(4px);
+    transition:opacity .12s ease, transform .12s ease;
+  }
+  .word-tooltip.visible{opacity:1;transform:translateY(0);}
+  .word-tooltip .term{color:var(--gold);font-weight:600;margin-right:6px;}
+  .word-tooltip .gloss{color:var(--ink);}
   rt{
     font-size:0.48em;
     color:var(--shu);
@@ -987,14 +1007,221 @@ function playUtteranceFor(el, word){
   window.speechSynthesis.speak(u);
 }
 
+// Pre-fetched via scripts/translate.py (Jisho.org) during the daily content task —
+// keyed by the exact ruby term as authored (e.g. "大雨", not any click-expanded
+// phrase), since that's the dictionary headword Jisho was queried with. Kana-only
+// words (wrapKanaWords) aren't looked up here — they're grammatical constructions,
+// not vocabulary, so a dictionary lookup on them mostly misses.
+const TRANSLATIONS = {
+  "一律": "uniform, even",
+  "一番": "number one, first",
+  "中": "medium (size), average (grade, level, etc.)",
+  "予防": "prevention, protection (against)",
+  "交通": "traffic, transportation",
+  "人": "person, someone",
+  "人気": "popularity, public favor",
+  "今": "now, the present time",
+  "今日": "today, this day",
+  "以上": "not less than ..., ... and over",
+  "企画": "planning, plan",
+  "会場": "assembly hall, meeting place",
+  "伝": "tradition, convention",
+  "使": "to use (a tool, method, etc.), to make use of",
+  "個人的": "personal, individual",
+  "優": "overall victory, championship",
+  "元気": "lively, full of spirit",
+  "入力": "input, (data) entry",
+  "冷": "refrigerator, fridge",
+  "出": "coming out, going out",
+  "出場": "participation (in a tournament, match, race, etc.), entry",
+  "分": "part, portion",
+  "刑罰": "(criminal) punishment, penalty",
+  "判断": "judgment, judgement",
+  "前向": "front-facing",
+  "力": "force, strength",
+  "加": "addition",
+  "励": "to encourage, to cheer on",
+  "勇気": "courage, bravery",
+  "動": "motion",
+  "勝利": "victory, triumph",
+  "協力": "cooperation, collaboration",
+  "印象的": "impressive, striking",
+  "危険運転": "dangerous driving, reckless driving",
+  "危険運転致死傷罪": "dangerous driving, reckless driving",
+  "原則": "principle, general rule",
+  "合": "gō, traditional unit of volume, approx. 180 ml",
+  "向": "opposite side, other side",
+  "呼": "breathing, respiration",
+  "呼気": "exhaled air, exhalation",
+  "喋": "to talk, to chat",
+  "四": "four, 4",
+  "回": "counter for occurrences",
+  "困難": "difficulty, hardship",
+  "基準": "standard, criterion",
+  "場合": "case, occasion",
+  "声": "voice",
+  "声優": "voice actor or actress (radio, animation, etc.)",
+  "夏": "summer",
+  "大変": "very, greatly",
+  "太郎": "first son",
+  "失": "unemployment",
+  "始": "beginning, start",
+  "姿": "figure, form",
+  "嬉": "happy, glad",
+  "実": "truth, reality",
+  "対": "pair, couple",
+  "対戦": "fighting (against), taking on (an opponent)",
+  "導入": "introduction, bringing in",
+  "年": "year",
+  "年以上": "year",
+  "年以下": "year",
+  "年連続": "year",
+  "影響": "influence, effect",
+  "思": "to think, to consider",
+  "感謝": "thanks, gratitude",
+  "手渡": "to hand (over), to deliver in person",
+  "技術": "technology, engineering",
+  "拘禁刑": "imprisonment",
+  "接戦": "close contest, close match",
+  "支援技術": "support, backing",
+  "改正後": "betterment, improvement",
+  "改正法": "revised law",
+  "数値": "numerical value",
+  "数値基準": "numerical value",
+  "文字": "letter (of an alphabet), character",
+  "新": "new, neo-",
+  "新潟": "Niigata (city, prefecture)",
+  "新潟市": "Niigata City Athletic Stadium",
+  "方": "direction, way",
+  "施行": "putting in force (a law), putting into operation",
+  "日": "Sunday",
+  "日本": "Japan",
+  "日本語": "Japanese (language)",
+  "明": "tomorrow",
+  "明日": "tomorrow",
+  "明確": "clear, precise",
+  "暑": "hot, warm",
+  "暮": "sunset, sundown",
+  "更新": "renewal, update",
+  "月": "Moon",
+  "月曜日": "Monday",
+  "末": "end, tip",
+  "本": "book, volume",
+  "本当": "truth, reality",
+  "来場者": "visitor, attendee",
+  "東芝": "Toshiba Corporation",
+  "楽": "comfort, ease",
+  "正常": "normal, regular",
+  "死亡": "death, dying",
+  "死傷事故": "casualties, the killed and wounded",
+  "気": "spirit, mind",
+  "気持": "feeling, sensation",
+  "水分補給": "hydration, rehydration",
+  "決": "decision, vote",
+  "決勝": "decision of a contest",
+  "沖縄": "Okinawa (city, prefecture)",
+  "沖縄尚学": "Okinawa Shogaku High School",
+  "津久井": "Tsukuimachi",
+  "活躍": "activity (esp. energetic or successful), great efforts",
+  "演": "speech, address",
+  "点": "dot, spot",
+  "無料": "free (of charge), gratuitous",
+  "熱中症": "heatstroke",
+  "状態": "state, condition",
+  "猛暑": "heat wave, fierce heat",
+  "理由": "reason, grounds",
+  "用意": "preparation, arrangements",
+  "甲子園": "Koshien Stadium (baseball park in Nishinomiya, Hyōgo Prefecture)",
+  "画面": "screen (of a TV, computer, etc.)",
+  "疲れ様": "tiredness, fatigue",
+  "病気": "illness (usu. excluding minor ailments, e.g. common cold), disease",
+  "発信": "dispatch, despatch",
+  "発展": "development, growth",
+  "目": "eye, eyeball",
+  "県内": "within the prefecture",
+  "祭": "festival, feast",
+  "筋萎縮性側索硬化症": "amyotrophic lateral sclerosis, ALS",
+  "粘": "stickiness, viscosity",
+  "素敵": "lovely, wonderful",
+  "紹介": "introduction, presentation",
+  "絶対": "absolutely, definitely",
+  "続": "to continue, to keep up",
+  "練習": "practice, training",
+  "聞": "to hear",
+  "自分": "myself, yourself",
+  "芸能": "public entertainment, performing arts",
+  "行": "line (of text), row",
+  "見": "the present, present time",
+  "視線入力": "one's line of sight, one's gaze",
+  "設": "establishment, creation",
+  "試": "trial, test",
+  "試合": "match, game",
+  "試合終盤": "match, game",
+  "話": "talk, speech",
+  "話題": "topic, subject",
+  "起": "to get up, to rise",
+  "超": "super-, ultra-",
+  "追加": "addition, supplement",
+  "進化": "evolution",
+  "進歩": "progress, advance",
+  "運転": "operation (of a machine), running",
+  "違反": "violation, offense",
+  "適用": "application (of a rule, law, method, etc.)",
+  "選手権": "championship, title (of champion)",
+  "選手権沖縄大会": "championship, title (of champion)",
+  "那覇": "Naha (city in Okinawa)",
+  "配": "delivery",
+  "配布": "distribution",
+  "重": "chief, main",
+  "金": "gold (Au)",
+  "関": "barrier, gate",
+  "難": "difficulty, trouble",
+  "音声合成": "speech synthesis, voice synthesis",
+  "音声合成技術": "speech synthesis, voice synthesis",
+  "頑張": "to persevere, to persist",
+  "食": "food, foodstuff",
+  "飲酒運転": "drunk driving, drink-driving",
+  "驚": "wonder, miracle",
+  "高校野球": "high-school baseball"
+};
+
+let tooltipEl = null;
+function getTooltipEl(){
+  if(!tooltipEl){
+    tooltipEl = document.createElement('div');
+    tooltipEl.className = 'word-tooltip';
+    document.body.appendChild(tooltipEl);
+    document.addEventListener('click', (e)=>{
+      if(!e.target.closest('ruby, .word')) hideTranslationTooltip();
+    });
+  }
+  return tooltipEl;
+}
+function hideTranslationTooltip(){
+  if(tooltipEl) tooltipEl.classList.remove('visible');
+}
+function showTranslationTooltip(anchorEl, term){
+  const gloss = TRANSLATIONS[term];
+  if(!gloss){ hideTranslationTooltip(); return; }
+  const tip = getTooltipEl();
+  tip.innerHTML = `<span class="term">${term}</span><span class="gloss">${gloss}</span>`;
+  const rect = anchorEl.getBoundingClientRect();
+  tip.classList.add('visible'); // measure after becoming visible so offsetWidth is correct
+  const left = Math.min(Math.max(8, rect.left), window.innerWidth - tip.offsetWidth - 8);
+  tip.style.left = left + 'px';
+  tip.style.top = (rect.bottom + 6) + 'px';
+}
+
 function speakWord(el){
   // Plain kana words (see wrapKanaWords below) carry their full spoken text as
   // their own textContent already — no ruby/rt to expand around.
   if(el.classList.contains('word')){
+    hideTranslationTooltip();
     playUtteranceFor(el, el.textContent.trim());
     return;
   }
   let word = stripRuby(el.innerHTML); // exact legacy behavior — the safety net
+  showTranslationTooltip(el, word); // look up the raw ruby term, before any expansion below
   try{
     const container = el.closest('p, li, td');
     if(container){
@@ -1129,7 +1356,7 @@ function renderRundown(){
   `).join('');
   rundownEl.innerHTML = `<div class="rundown-head">Rundown &middot; 全${segments.length}セグメント</div>${items}`;
   rundownEl.querySelectorAll('.rd-item').forEach(el=>{
-    el.addEventListener('click', ()=>{ stopAllAudio(); current = parseInt(el.dataset.i); renderStage(); renderRundown(); });
+    el.addEventListener('click', ()=>{ stopAllAudio(); hideTranslationTooltip(); current = parseInt(el.dataset.i); renderStage(); renderRundown(); });
   });
 }
 
@@ -1192,8 +1419,8 @@ function renderStage(){
   stageEl.style.setProperty('--fs', fontSize+'px');
   progressFill.style.width = (((current+1)/segments.length)*100)+'%';
 
-  document.getElementById('prevBtn').addEventListener('click', ()=>{ stopAllAudio(); if(current>0){current--; renderStage(); renderRundown();}});
-  document.getElementById('nextBtn').addEventListener('click', ()=>{ stopAllAudio(); if(current<segments.length-1){current++; renderStage(); renderRundown();}});
+  document.getElementById('prevBtn').addEventListener('click', ()=>{ stopAllAudio(); hideTranslationTooltip(); if(current>0){current--; renderStage(); renderRundown();}});
+  document.getElementById('nextBtn').addEventListener('click', ()=>{ stopAllAudio(); hideTranslationTooltip(); if(current<segments.length-1){current++; renderStage(); renderRundown();}});
 
   // voice-over: a speaker button per narration paragraph and per reaction line, plus a "play whole segment" button.
   // Each line plays its pre-rendered audio/*.mp3 (s.audio.narration[i] / s.audio.reaction[i]) when the
