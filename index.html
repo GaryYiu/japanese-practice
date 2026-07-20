@@ -1022,12 +1022,74 @@ function playUtteranceFor(el, word){
   window.speechSynthesis.speak(u);
 }
 
-// Pre-fetched via scripts/translate.py (Jisho.org) during the daily content task —
-// keyed by the exact ruby term as authored (e.g. "大雨", not any click-expanded
-// phrase), since that's the dictionary headword Jisho was queried with. Kana-only
-// words (wrapKanaWords) aren't looked up here — they're grammatical constructions,
-// not vocabulary, so a dictionary lookup on them mostly misses.
+// Pre-fetched via scripts/translate_batch.py (Jisho.org) during the daily content
+// task. Two kinds of keys: ruby-anchored kanji terms as authored (e.g. "大雨", not
+// any click-expanded phrase — that's the dictionary headword Jisho was queried
+// with), and standalone kana words/phrases exactly as wrapKanaWords wraps them
+// (e.g. "ニュース", "それ") since those have no separate raw/expanded form. Purely
+// grammatical kana chains (あるそうです-style constructions) are still attempted —
+// most just miss gracefully, same as any word Jisho doesn't have.
 const TRANSLATIONS = {
+  "あいまい": "vague, ambiguous",
+  "あいまいだったなんて": "vague, ambiguous",
+  "あした": "tomorrow",
+  "あす": "tomorrow",
+  "あったそうです": "to be, to exist",
+  "あわせて": "in all, in total",
+  "いたそうです": "board, plank",
+  "お": "tail (of an animal), cauda",
+  "おなじみ": "familiar, well-known",
+  "かけた": "lesser cuckoo (Cuculus poliocephalus)",
+  "こういう": "such, this sort of",
+  "ここ": "individual, one by one",
+  "この": "this",
+  "これ": "this, this one",
+  "こんにち": "today, this day",
+  "した": "tongue",
+  "しないよう": "in the city, within the city",
+  "すごい": "terrible, dreadful",
+  "そして": "and, and then",
+  "それ": "that, it",
+  "だったら": "if it's the case",
+  "ちなみ": "by the way, in this connection",
+  "ちょっと": "a little, a bit",
+  "つ": "saliva, spit",
+  "つけたい": "to attach, to join",
+  "つながったみたいです": "to be connected (to), to be joined together",
+  "てきた": "hostility, antagonism",
+  "です": "be, is",
+  "というあいまい": "called, named",
+  "というイベント": "called, named",
+  "とって": "handle, grip",
+  "どんどん": "drumming (noise), beating",
+  "ながら": "while, during",
+  "なるということです": "to become, to get",
+  "にびっくりしました": "two, 2",
+  "はっきり": "clearly, plainly",
+  "ばらつき": "unevenness (e.g. in quality), inconstancy",
+  "また": "again, once more",
+  "みなさん": "all, everyone",
+  "もし": "if, in case",
+  "もらえたら": "to be able to receive, to be able to take",
+  "もらった": "to receive, to take",
+  "られたらいい": "indicates passive voice (incl. the \"suffering passive\")",
+  "わたしも": "ferryman",
+  "アイス": "ice",
+  "アルコール": "alcohol",
+  "イベントだなと": "event",
+  "キャラクター": "character, personality",
+  "スピード": "speed",
+  "スポーツ": "sport, sports",
+  "ソフト": "soft",
+  "ドキドキしただろうなと": "thump-thump, bang-bang",
+  "ニャンちゅう": "meow, miaow",
+  "ニュース": "news",
+  "ニュースです": "news",
+  "ブログ": "blog",
+  "ミリグラム": "milligram, mg",
+  "ラジオ": "radio",
+  "リットルあたりアルコール": "alcohol",
+  "ルール": "rule",
   "一律": "uniform, even",
   "一番": "number one, first",
   "中": "medium (size), average (grade, level, etc.)",
@@ -1229,10 +1291,12 @@ function showTranslationTooltip(anchorEl, term){
 
 function speakWord(el){
   // Plain kana words (see wrapKanaWords below) carry their full spoken text as
-  // their own textContent already — no ruby/rt to expand around.
+  // their own textContent already — no ruby/rt to expand around, and no raw
+  // vs. expanded distinction, so the lookup key is just the word itself.
   if(el.classList.contains('word')){
-    hideTranslationTooltip();
-    playUtteranceFor(el, el.textContent.trim());
+    const kanaWord = el.textContent.trim();
+    showTranslationTooltip(el, kanaWord);
+    playUtteranceFor(el, kanaWord);
     return;
   }
   let word = stripRuby(el.innerHTML); // exact legacy behavior — the safety net

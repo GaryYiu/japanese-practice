@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
-"""Fetch a short English gloss for every unique <ruby> term in index.html's
-segments data (via Jisho.org, no API key needed) and rewrite the TRANSLATIONS
-object in index.html to match.
+"""Fetch a short English gloss for every clickable word in index.html's segments
+data — both ruby-anchored kanji terms AND standalone kana words/phrases (e.g.
+ニュース, それ, あるそうです) — via Jisho.org (no API key needed), and rewrite
+the TRANSLATIONS object in index.html to match.
+
+The word list comes from scripts/extract_words.js, which reuses the actual
+vendored TinySegmenter + PARTICLE_STOP_WORDS straight out of index.html, so it
+can't drift from what the browser's click-to-pronounce feature considers
+clickable.
 
 Run this once, after the day's narration/reaction/vocab text is final. Does
-everything in one process — no per-word shell calls — to keep the scheduled
-task's tool-call/context footprint small even with 150+ words a day.
+the whole batch in one process — no per-word shell calls — to keep the
+scheduled task's tool-call/context footprint small even with 200+ words a day.
 
 Usage: translate_batch.py [path/to/index.html]  (defaults to ./index.html)
 """
 import json
+import os
 import re
+import subprocess
 import sys
 import time
 import urllib.parse
@@ -38,10 +46,10 @@ def main():
     with open(path, encoding="utf-8") as f:
         html = f.read()
 
-    start = html.index("const segments = [")
-    end = html.index("let current", start)
-    segment_data = html[start:end]
-    terms = sorted(set(re.findall(r"<ruby>([^<]+)<rt>", segment_data)))
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    extractor = os.path.join(script_dir, "extract_words.js")
+    result = subprocess.run(["node", extractor, path], capture_output=True, text=True, check=True)
+    terms = json.loads(result.stdout)
 
     results = {}
     for term in terms:
