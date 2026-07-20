@@ -238,6 +238,21 @@
     position:sticky;
     top:18px;
   }
+  @media (max-width:820px){
+    /* Stacked single-column layout (above) puts the rundown above the stage in
+       source order — without a height cap its full 7-segment list pushes the
+       actual narration/paragraph content off-screen, requiring a huge scroll
+       just to reach any reading content. Cap it to a short, internally-
+       scrollable strip instead, and drop the sticky positioning (it fights the
+       internal scroll and serves no purpose once the list no longer spans the
+       page). Placed after the base .rundown rule above so this override
+       actually wins — same selector specificity, so source order decides. */
+    .rundown{
+      position:static;
+      max-height:220px;
+      overflow-y:auto;
+    }
+  }
   .rundown-head{
     font-family:'IBM Plex Mono',monospace;
     font-size:10px;
