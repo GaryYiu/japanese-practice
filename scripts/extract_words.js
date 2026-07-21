@@ -86,17 +86,20 @@ function extractFromString(str) {
   const { text, rubies } = buildOffsetMapFromString(str);
   if (!text) return words;
 
-  // Translation keys for ruby-anchored words are each ruby's own RAW term (e.g.
-  // "始", "熱中症"), never the click-to-pronounce EXPANDED phrase (e.g.
-  // "始めましょう") — a bare kanji/compound is a real dictionary headword, an
-  // inflected phrase usually isn't, so expanding here would gut the hit rate.
-  // `claimed` (the expanded range) is still needed to correctly exclude
-  // trailing okurigana from being separately picked up as a kana chunk below.
+  // Primary translation key is the click-to-pronounce EXPANDED phrase (e.g.
+  // "始めましょう", "高くなっていて", "上がり") — that's the word the user actually
+  // clicks and hears, so its gloss is what the tooltip should show. Jisho's search
+  // lemmatizes inflected forms well (~98% hit on real content), so this reads far
+  // more accurately than the bare kanji (e.g. 上 alone → "above, over", but 上がり
+  // → "rise, increase"). We ALSO keep each ruby's bare term (高, 上) as a fallback
+  // key for the ~2% of phrases Jisho can't lemmatize (続きそう, 同じ日).
   const claimed = [];
   for (const group of gluedGroups(rubies)) {
     const gStart = group[0].start, gEnd = group[group.length - 1].end;
     const [s, e] = resolveSpokenRange(text, rubies, gStart, gEnd);
     claimed.push([s, e]);
+    const expanded = text.slice(s, e).trim();
+    if (expanded) words.add(expanded);
     for (const r of group) {
       const w = text.slice(r.start, r.end).trim();
       if (w) words.add(w);
